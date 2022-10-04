@@ -1,2 +1,7 @@
 data/raw_data/
 dataframe_decomp.log
+data/decomp_100_frames*
+*.log 
+wandb/*
+src/*
+default_checkpoints/*
