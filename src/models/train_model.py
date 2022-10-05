@@ -14,8 +14,8 @@ from torchvision.models import ResNet18_Weights, ConvNeXt_Large_Weights
 from torch.utils.data import DataLoader
 import argparse
 
-here = pathlib.Path(__file__).parent.parent.resolve()
-DECOMP_PATH = os.path.join(here, "data", "decomp_100_frames_balanced")
+here = pathlib.Path(__file__).parent.resolve()
+DECOMP_PATH = os.path.join(here, "..", "decomp_400_frames_balanced")
 
 
 def generate_dataloaders():
@@ -100,11 +100,11 @@ if __name__ == "__main__":
         base_model=model,
         trainer_config={
             "max_epochs": 500,
-            "logger": WandbLogger(project="Julian EntryExit", name=params["name"]),
+            "logger": WandbLogger(project="Julian EntryExit DecompV2", name=params["name"]),
             "callbacks": [
                 ModelCheckpoint(
                     dirpath=os.path.join(here, params["name"]),
-                    filename=f"{params['name']}-" + "model-{epoch}",
+                    filename="model-{epoch}",
                     monitor="val_loss",
                     mode="min",
                     save_top_k=-1,
