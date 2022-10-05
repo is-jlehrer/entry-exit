@@ -6,3 +6,8 @@ wandb/*
 default_checkpoints/*
 ml_common/*
 *.ckpt
+decomp_*
+__pycache__
+data/*/**
+src/data/*
+src/models/wandb/*
