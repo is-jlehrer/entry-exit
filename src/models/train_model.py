@@ -1,5 +1,8 @@
 import os
 import pathlib
+import sys
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
 
 import torch.nn as nn
 import torch.optim as optim
@@ -15,8 +18,7 @@ from torch.utils.data import DataLoader
 import argparse
 
 here = pathlib.Path(__file__).parent.resolve()
-DECOMP_PATH = os.path.join(here, "..", "decomp_400_frames_balanced")
-
+from utils import DECOMP_PATH
 
 def generate_dataloaders():
     transform = {

@@ -10,4 +10,5 @@ decomp_*
 __pycache__
 data/*/**
 src/data/*
+.DS_Store
 src/models/wandb/*
