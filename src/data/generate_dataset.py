@@ -11,7 +11,7 @@ import cv2 as cv
 from PIL import Image
 import concurrent.futures
 import pandas as pd
-
+import argparse
 from lightml.data.decomp import DecompFromDataFrame
 from utils import format_data_csv, DECOMP_PATH
 
@@ -41,7 +41,7 @@ def download_from_uri(uri, local_path):
     return filename
 
 
-def decomp_all_from_one_vid(vid_row, local_path, format):
+def decomp_all_from_one_vid(vid_row, local_path, format, outside_prop, inside_prop):
     st, et, uri, local = (
         vid_row["start_time"],
         vid_row["end_time"],
@@ -49,7 +49,7 @@ def decomp_all_from_one_vid(vid_row, local_path, format):
         vid_row["local_path"],
     )
 
-    print(f'Downloading {uri}')
+    print(f"Downloading {uri}")
     download_from_uri(uri, local)
     cap = cv.VideoCapture(local)
 
@@ -57,28 +57,35 @@ def decomp_all_from_one_vid(vid_row, local_path, format):
     inside_path = "inside"
     os.makedirs(os.path.join(local_path, outside_path), exist_ok=True)
     os.makedirs(os.path.join(local_path, inside_path), exist_ok=True)
+
     success = cap.grab()  # get the first frame
     frame_number = 1  # Don't want first modulus check to be True
     total_saved = 0
+    in_procedure = False
 
-    print('Performing decomp')
+    outside_sample_rate = 1 // outside_prop
+    inside_sample_rate = 1 // inside_prop
+
+    print("Performing decomp")
     while success:
-        if frame_number % 10 == 0:
+        if frame_number % (outside_sample_rate if not in_procedure else inside_sample_rate) == 0:
             time = cap.get(cv.CAP_PROP_POS_MSEC)
             try:
                 success, img = cap.retrieve()
             except Exception as e:
                 print("Error when trying to recieve frame")
                 print(e)
-            
+
             # Outside
             if time < st or time > et:
+                in_procedure = False
                 impath = os.path.join(
                     local_path,
                     outside_path,
                     f"{frame_number}{format}",
                 )
             else:  # inside
+                in_procedure = True
                 impath = os.path.join(
                     local_path,
                     inside_path,
@@ -91,16 +98,15 @@ def decomp_all_from_one_vid(vid_row, local_path, format):
             img = Image.fromarray(img)
             img.save(impath)
             total_saved += 1
-        else:
-            success = cap.grab()
 
         frame_number += 1
+        success = cap.grab()
 
-    print('Done, deleting video')
+    print("Done, deleting video")
     os.remove(local)
 
 
-def decomp_all_files(files, n_workers, local_path, format):
+def decomp_all_files(files, n_workers, local_path, format, outside_prop, inside_prop):
     os.makedirs(local_path, exist_ok=True)
     with tqdm.tqdm(total=len(files)) as pbar:
         with concurrent.futures.ThreadPoolExecutor(max_workers=n_workers) as executor:
@@ -113,6 +119,8 @@ def decomp_all_files(files, n_workers, local_path, format):
                         files.loc[i, :],
                         local_path,
                         format,
+                        outside_prop,
+                        inside_prop,
                     )
                 )
             for future in concurrent.futures.as_completed(futures):
@@ -136,11 +144,52 @@ if __name__ == "__main__":
 
     # handler.decomp()
 
-    print('Reading in csv...')
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+        "--outside-prop",
+        type=float,
+        help="Proportion of frames to sample per video outside of the procedure",
+        default=0.6,
+        required=False,
+    )
+
+    parser.add_argument(
+        "--inside-prop",
+        type=float,
+        help="Proportion of frames to sample per video inside of the procedure",
+        default=0.2,
+        required=False,
+    )
+
+    args = parser.parse_args()
+    outside, inside = args.outside_prop, args.inside_prop
+
+    print("Reading in csv...")
     train = format_data_csv(os.path.join(curr, "train_na_stratified.csv"))
     val = format_data_csv(os.path.join(curr, "val_na_stratified.csv"))
     test = format_data_csv(os.path.join(curr, "test_na_stratified.csv"))
 
-    decomp_all_files(train, local_path=os.path.join(curr, '..', 'full_decomp', 'train'), n_workers=8, format=".png")
-    decomp_all_files(val, local_path=os.path.join(curr, '..', 'full_decomp', 'val'), n_workers=8, format=".png")
-    decomp_all_files(test, local_path=os.path.join(curr, '..', 'full_decomp', 'test'), n_workers=8, format=".png")
+    decomp_all_files(
+        train,
+        local_path=os.path.join(curr, "..", "full_decomp", "train"),
+        n_workers=8,
+        format=".png",
+        outside_prop=outside,
+        inside_prop=inside,
+    )
+    decomp_all_files(
+        val,
+        local_path=os.path.join(curr, "..", "full_decomp", "val"),
+        n_workers=8,
+        format=".png",
+        outside_prop=outside,
+        inside_prop=inside,
+    )
+    decomp_all_files(
+        test,
+        local_path=os.path.join(curr, "..", "full_decomp", "test"),
+        n_workers=8,
+        format=".png",
+        outside_prop=outside,
+        inside_prop=inside,
+    )
