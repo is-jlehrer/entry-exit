@@ -93,13 +93,15 @@ if __name__ == "__main__":
     params = generate_parser()
     train, val = generate_dataloaders()
 
+    for X, y in train:
+        print(y)
+        
     model = eval(f"models.{params['model']}()")
     model.fc = nn.Linear(in_features=model.fc.in_features, out_features=2)
 
     os.makedirs(os.path.join(here, params["name"]), exist_ok=True)
 
     device = "cuda:0" if torch.cuda.is_available() else "cpu"
-
     optimizer = optim.SGD(
         params=model.parameters(),
         lr=float(params["lr"]),
@@ -141,4 +143,4 @@ if __name__ == "__main__":
         },
     )
 
-    train_handler.fit(train, val)
+    # train_handler.fit(train, val)
