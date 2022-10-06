@@ -20,7 +20,7 @@ if __name__ == "__main__":
         local_path=os.path.join(DECOMP_PATH),
         img_format=".jpg",
         val_prop=0.2,
-        test_prop=0.1,
+        test_prop=0.05,
         max_workers=8,
     )
 
