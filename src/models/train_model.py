@@ -1,24 +1,30 @@
 import os
 import pathlib
 import sys
+
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 
+import argparse
+
+import torch
 import torch.nn as nn
 import torch.optim as optim
 import torchvision.models as models
 from lightml.data.make_dataset import Loaders, StandardImageDataset
 from lightml.models.train_model import TrainModel
-from pytorch_lightning.callbacks import EarlyStopping, LearningRateMonitor, ModelCheckpoint, StochasticWeightAveraging
+from pytorch_lightning.callbacks import (EarlyStopping, LearningRateMonitor,
+                                         ModelCheckpoint,
+                                         StochasticWeightAveraging)
 from pytorch_lightning.loggers import WandbLogger
+from torch.utils.data import DataLoader
 from torchmetrics import Accuracy, F1Score, Precision, Recall
 from torchvision import transforms
-from torchvision.models import ResNet18_Weights, ConvNeXt_Large_Weights
-from torch.utils.data import DataLoader
-import argparse
+from torchvision.models import ConvNeXt_Large_Weights, ResNet18_Weights
 
 here = pathlib.Path(__file__).parent.resolve()
 from utils import DECOMP_PATH
+
 
 def generate_dataloaders():
     transform = {
@@ -92,6 +98,8 @@ if __name__ == "__main__":
 
     os.makedirs(os.path.join(here, params["name"]), exist_ok=True)
 
+    device = "cuda:0" if torch.cuda.is_available() else "cpu"
+
     optimizer = optim.SGD(
         params=model.parameters(),
         lr=float(params["lr"]),
@@ -102,7 +110,7 @@ if __name__ == "__main__":
         base_model=model,
         trainer_config={
             "max_epochs": 500,
-            "logger": WandbLogger(project="Julian EntryExit DecompV2", name=params["name"]),
+            "logger": WandbLogger(project="Julian EntryExit", name=params["name"]),
             "callbacks": [
                 ModelCheckpoint(
                     dirpath=os.path.join(here, params["name"]),
@@ -125,10 +133,10 @@ if __name__ == "__main__":
             "scheduler": optim.lr_scheduler.ReduceLROnPlateau(optimizer, factor=0.75),
             "loss": nn.CrossEntropyLoss(),
             "metrics": {
-                "accuracy": Accuracy(average="macro", num_classes=2),
-                "precision": Precision(average="macro", num_classes=2),
-                "recall": Recall(average="macro", num_classes=2),
-                "f1": F1Score(average="macro", num_classes=2),
+                "accuracy": Accuracy(average="macro", num_classes=2).to(device),
+                "precision": Precision(average="macro", num_classes=2).to(device),
+                "recall": Recall(average="macro", num_classes=2).to(device),
+                "f1": F1Score(average="macro", num_classes=2).to(device),
             },
         },
     )
