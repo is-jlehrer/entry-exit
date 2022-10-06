@@ -141,7 +141,6 @@ if __name__ == "__main__":
     test = format_data_csv(os.path.join(curr, "test_na_stratified.csv"))
 
     print('Decomping frames for train/val/test')
-    decomp_all_files(train, local_path=os.path.join(curr, '..', 'full_decomp', 'train'))
-    decomp_all_files(val, local_path=os.path.join(curr, '..', 'full_decomp', 'val'))
-    decomp_all_files(test, local_path=os.path.join(curr, '..', 'full_decomp', 'test'))
-    
+    decomp_all_files(train, local_path=os.path.join(curr, '..', 'full_decomp', 'train'), n_workers=8, format=".png")
+    decomp_all_files(val, local_path=os.path.join(curr, '..', 'full_decomp', 'val'), n_workers=8, format=".png")
+    decomp_all_files(test, local_path=os.path.join(curr, '..', 'full_decomp', 'test'), n_workers=8, format=".png")
