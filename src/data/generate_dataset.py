@@ -55,17 +55,18 @@ def decomp_all_from_one_vid(vid_row, local_path, format):
 
     outside_path = "outside"
     inside_path = "inside"
-
+    os.makedirs(os.path.join(local_path, outside_path), exist_ok=True)
+    os.makedirs(os.path.join(local_path, inside_path), exist_ok=True)
     success = cap.grab()  # get the first frame
     frame_number = 1  # Don't want first modulus check to be True
     total_saved = 0
 
     print('Performing decomp')
     while success:
-        if frame_number % 100 == 0:
+        if frame_number % 10 == 0:
             time = cap.get(cv.CAP_PROP_POS_MSEC)
             try:
-                _, img = cap.retrieve()
+                success, img = cap.retrieve()
             except Exception as e:
                 print("Error when trying to recieve frame")
                 print(e)
@@ -139,8 +140,7 @@ if __name__ == "__main__":
     train = format_data_csv(os.path.join(curr, "train_na_stratified.csv"))
     val = format_data_csv(os.path.join(curr, "val_na_stratified.csv"))
     test = format_data_csv(os.path.join(curr, "test_na_stratified.csv"))
-    decomp_all_from_one_vid(train.loc[0, :], "test", ".png")
-    print('Decomping frames for train/val/test')
+
     decomp_all_files(train, local_path=os.path.join(curr, '..', 'full_decomp', 'train'), n_workers=8, format=".png")
     decomp_all_files(val, local_path=os.path.join(curr, '..', 'full_decomp', 'val'), n_workers=8, format=".png")
     decomp_all_files(test, local_path=os.path.join(curr, '..', 'full_decomp', 'test'), n_workers=8, format=".png")
