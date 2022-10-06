@@ -49,6 +49,7 @@ def decomp_all_from_one_vid(vid_row, local_path, format):
         vid_row["local_path"],
     )
 
+    print(f'Downloading {uri}')
     download_from_uri(uri, local)
     cap = cv.VideoCapture(local)
 
@@ -59,6 +60,7 @@ def decomp_all_from_one_vid(vid_row, local_path, format):
     frame_number = 1  # Don't want first modulus check to be True
     total_saved = 0
 
+    print('Performing decomp')
     while success:
         if frame_number % 100 == 0:
             time = cap.get(cv.CAP_PROP_POS_MSEC)
@@ -93,12 +95,12 @@ def decomp_all_from_one_vid(vid_row, local_path, format):
 
         frame_number += 1
 
+    print('Done, deleting video')
     os.remove(local)
 
 
 def decomp_all_files(files, n_workers, local_path, format):
     os.makedirs(local_path, exist_ok=True)
-
     with tqdm.tqdm(total=len(files)) as pbar:
         with concurrent.futures.ThreadPoolExecutor(max_workers=n_workers) as executor:
             futures = []
@@ -133,10 +135,12 @@ if __name__ == "__main__":
 
     # handler.decomp()
 
+    print('Reading in csv...')
     train = format_data_csv(os.path.join(curr, "train_na_stratified.csv"))
     val = format_data_csv(os.path.join(curr, "val_na_stratified.csv"))
     test = format_data_csv(os.path.join(curr, "test_na_stratified.csv"))
 
+    print('Decomping frames for train/val/test')
     decomp_all_files(train, local_path=os.path.join(curr, '..', 'full_decomp', 'train'))
     decomp_all_files(val, local_path=os.path.join(curr, '..', 'full_decomp', 'val'))
     decomp_all_files(test, local_path=os.path.join(curr, '..', 'full_decomp', 'test'))
