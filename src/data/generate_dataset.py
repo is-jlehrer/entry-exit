@@ -105,12 +105,12 @@ def decomp_all_files(files, n_workers, local_path, format):
     with tqdm.tqdm(total=len(files)) as pbar:
         with concurrent.futures.ThreadPoolExecutor(max_workers=n_workers) as executor:
             futures = []
-            for row in files.iterrows():
+            for i in range(len(files)):
                 # More inefficient than apply but still < 200 vids generally. Slowdown is marginal
                 futures.append(
                     executor.submit(
                         decomp_all_from_one_vid,
-                        row,
+                        files.loc[i, :],
                         local_path,
                         format,
                     )
