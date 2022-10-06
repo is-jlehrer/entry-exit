@@ -1,0 +1,17 @@
+site_code,s3_loc,entry-time,exit-time,is_upper,multiple_procedures,Issue / comments,Claim,Checked by,Comment,has_na
+S531414,is-cdp-s531414-ingest-ph/Lubbock/PC127/202206/2022-06-1007-00-05_t_07_16603.5.mp4,0:49,1:24,False,True,Entry (2): 1:30 Exit (2): 7:16,David,,,False
+S586353,is-cdp-s586353-ingest-ph/Velocity_Spokane/PC143/202204/2022-04-2808-00-02_d_01.mp4,,11:39,,,,Pratik,,,True
+S652713,is-cdp-s652713-ingest-ph/Atlanta/PC115/202202/2022-02-0208-00-05_o_12_7151.5.mp4,,,False,True,,Abbey,,,True
+S143500,is-cdp-s143500-ingest-ph/myrtlesc/PC155/202205/2022-05-1108-00-01_v_04.mp4,0:29,16:41,,,Polypectomy at 9:30,Pratik,,,False
+S510872,is-cdp-s510872-ingest-ph/GA_TIDEWATER/PC151/202205/2022-05-0308-00-02_n_19.mp4,0:16,11:09,False,False,,David,,,False
+S143500,is-cdp-s143500-ingest-ph/myrtlesc/PC155/202205/2022-05-1108-00-01_v_09.mp4,0:32,10:49,,,,Pratik,,,False
+S690122,is-cdp-s690122-ingest-ph/a1springtx/PC128/202206/2022-06-2707-00-07_y_03_6752.83.mp4,00:39,13:10,False,FALSE,,Zaid,,,False
+S656189,is-cdp-s656189-ingest-ph/Endo/PC118/202202/2022-02-1808-00-07_a_16_26400.8.mp4,,,True,False,,Eva,,,True
+S586353,is-cdp-s586353-ingest-ph/Velocity_Spokane/PC143/202204/2022-04-2808-00-02_d_12.mp4,00:14,08:55,,,polypectomy 5:03,Pratik,,,False
+S830922,is-cdp-s830922-ingest-ph/tampabayfl/PC188/202208/2022-08-0507-00-04_m_07_10053.5.mp4,1:18,26:17,False,FALSE,biopsy 17:53,Eva,,,False
+S531414,is-cdp-s531414-ingest-ph/Lubbock/PC127/202204/2022-04-1108-00-05_c_03_17344.2.mp4,0:16,9:02,False,False,,David,,,False
+S149445,is-cdp-s149445-ingest-ph/clemsonsc/PC161/202206/test_video.mp4,,,,,Non-endoscopic footage (You tube channel),Pratik,,,True
+S656189,is-cdp-s656189-ingest-ph/Endo/PC118/202202/2022-02-1708-00-07_m_03_7414.17.mp4,00:06,07:01,False,False,,Abbey,,,False
+S656189,is-cdp-s656189-ingest-ph/Endo/PC118/202202/2022-02-1808-00-07_a_02_5999.5.mp4,,,False,False,"Scope recording in suite, no insertion",Abbey,,,True
+S690122,is-cdp-s690122-ingest-ph/a1springtx/PC128/202208/2022-08-1210-41-20_v_01_5295.5.mp4,00:09,03:55,True,FALSE,,Zaid,,,False
+S920842,is-cdp-s920842-ingest-ph/Guilford/PC126/202206/2022-06-2407-00-07_i_05_5998.17.mp4,00:59,16:12,,,polypectomy @ 15:33,Abbey,Pratik,Good,False

@@ -1,0 +1,81 @@
+site_code,s3_loc,entry-time,exit-time,is_upper,multiple_procedures,Issue / comments,Claim,Checked by,Comment,has_na
+S586353,is-cdp-s586353-ingest-ph/Velocity_Spokane/PC143/202204/2022-04-2808-00-02_d_07.mp4,00:35,12:33,,,,Pratik,,,False
+S666323,is-cdp-s666323-ingest-ph/AIR/Lancaster/LT113/2022-04-0714-19-57.mp4,,,,TRUE,biopsy taken 04:44,Dan,,,True
+S690122,is-cdp-s690122-ingest-ph/a1springtx/PC128/202206/2022-06-2407-00-01_q_02_20253.5.mp4,00:24,07:34,False,FALSE,,Zaid,,,False
+S531414,is-cdp-s531414-ingest-ph/Lubbock/PC127/202206/2022-06-1307-00-07_a_04_22774.2.mp4,,,False,True,"polypectomy @ 05:51, 09:24, 11:45, 13:53, 14:48",Abbey,,,True
+S586353,is-cdp-s586353-ingest-ph/Velocity_Spokane/PC143/202204/2022-04-2808-00-02_d_13.mp4,00:20,09:05,,,polypectomy 6:58,Pratik,,,False
+S666323,is-cdp-s666323-ingest-ph/AIR/Lancaster/LT113/2022-02-1411-08-48-P91360.mp4,,,,,"biopsy taken 06:21, 06:51",Dan,,,True
+S656189,is-cdp-s656189-ingest-ph/Endo/PC118/202202/2022-02-1808-00-07_a_05_9252.83.mp4,0:06,4:18,False,False,ulcerations & biopsy 2:00,Eva,,,False
+S149445,is-cdp-s149445-ingest-ph/clemsonsc/PC161/202207/2022-07-0507-00-03_u_11_9604.17.mp4,0:08,23:58,,,Polypectomy at 23:50,Pratik,,,False
+S656189,is-cdp-s656189-ingest-ph/Endo/PC118/202202/2022-02-1808-00-07_a_03_6462.83.mp4,0:16,8:30,False,False,,Eva,,,False
+S666323,is-cdp-s666323-ingest-ph/AIR/Lancaster/LT113/2022-02-0812-52-53-1114253.mp4,,16:11,,,"biopsy taken 01:03, 07:35, 8:56, 12:52, 15:03,15:41",Dan,,,True
+S920842,is-cdp-s920842-ingest-ph/Guilford/PC126/202206/2022-06-2407-00-07_i_29_21900.2.mp4,02:18,15:15,,,polypectomy @ 14:40,Abbey,,,False
+S284442,is-cdp-s284442-ingest-ph/GLY/PC112/202201/2022-01-1308-00-06_p_01_0.mp4,,07:48,False,FALSE,04:33 polyp snare cold ,Sanki,,,True
+S920842,is-cdp-s920842-ingest-ph/Guilford/PC126/202206/2022-06-2811-04-39_f_06_2696.17.mp4,,,True,TRUE,,Abbey,,,True
+S740586,is-cdp-s740586-ingest-ph/orlandofl/PC148/202206/2022-06-0108-00-03_m_09.mp4,0:11,13:11,False,FALSE,"biopsy 7:32, 7:37, 8:33, 8:37, 10:05, ",Eva,,,False
+S862973,is-cdp-s862973-ingest-ph/CUMBERLAND/PC144/202205/2022-05-1007-00-01_e_05.mp4,0:43,10:44,False,False,,Eva,,,False
+S830922,is-cdp-s830922-ingest-ph/tampabayfl/PC188/202208/2022-08-0407-00-01_k_05_7821.5.mp4,,,True,FALSE,,Eva,,,True
+S531414,is-cdp-s531414-ingest-ph/Lubbock/PC127/202206/2022-06-0807-00-05_d_06_26524.2.mp4,0:08,,False,False,Biopsy: (1) 3:21 ,David,,,False
+S830922,is-cdp-s830922-ingest-ph/tampabayfl/PC188/202208/2022-08-0407-00-01_k_16_24922.2.mp4,0:21,15:27,False,FALSE,biopsy 15:09; bad bowel prep,Eva,,,False
+S920842,is-cdp-s920842-ingest-ph/Guilford/PC126/202205/2022-05-2508-00-07_a_03.mp4,0:20,,,,no PHI in this clip,David,,,False
+S143500,is-cdp-s143500-ingest-ph/myrtlesc/PC155/202205/2022-05-1008-00-02_f_12.mp4,,,True,,,Pratik,,,True
+S586353,is-cdp-s586353-ingest-ph/Velocity_Spokane/PC143/202204/2022-04-1311-18-39_r_01.mp4,,,,,No procedure (other footage),Pratik,,,True
+S167132,is-cdp-s167132-ingest-ph/ORANGEBURG/PC154/202205/2022-05-0408-00-03_c_07.mp4,0:41,12:01,False,False,,Zaid,,,False
+S690122,is-cdp-s690122-ingest-ph/a1springtx/PC128/202206/2022-06-2707-00-07_y_08_19628.8.mp4,00:14,02:40,True,FALSE,,Zaid,,,False
+S690122,is-cdp-s690122-ingest-ph/a1springtx/PC128/202206/2022-06-2707-00-07_y_09_20044.2.mp4,01:04,12:44,False,FALSE,,Zaid,,,False
+S167132,is-cdp-s167132-ingest-ph/ORANGEBURG/PC154/202205/2022-05-1108-00-03_f_06.mp4,0:36,9:00,False,False,,Zaid,,,False
+S830922,is-cdp-s830922-ingest-ph/tampabayfl/PC188/202208/2022-08-0807-00-03_h_16_17305.5.mp4,0:25,,,,,David,,,False
+S666323,is-cdp-s666323-ingest-ph/AIR/Lancaster/LT113/2022-03-0113-41-46-1654687.mp4,00:03,,,,,Dan,,,False
+S652713,is-cdp-s652713-ingest-ph/Atlanta/PC115/202205/2022-05-1908-00-07_s_02_18319.5.mp4,00:27,12:19,False,False,,Abbey,,,False
+S143500,is-cdp-s143500-ingest-ph/myrtlesc/PC155/202205/2022-05-1008-00-02_f_06.mp4,,,True,,,Pratik,,,True
+S586353,is-cdp-s586353-ingest-ph/Velocity_Spokane/PC143/202204/2022-04-2808-00-02_d_06.mp4,,,True,,,Pratik,,,True
+S666323,is-cdp-s666323-ingest-ph/AIR/Lancaster/LT113/2022-02-1411-44-31-232511.mp4,00:02,,,,"biopsy taken 11:11, 12:07",Dan,,,False
+S284442,is-cdp-s284442-ingest-ph/GLY/PC112/202202/2022-02-1107-45-04_r_04_5094.83.mp4,,,,TRUE ,Multiple re-entries for a lower procedure ,Sanki,,,True
+S167132,is-cdp-s167132-ingest-ph/ORANGEBURG/PC154/202205/2022-05-1108-00-03_f_02.mp4,0:32,10:54,False,False,,Zaid,,,False
+S862973,is-cdp-s862973-ingest-ph/CUMBERLAND/PC144/202205/2022-05-0905-00-03_e_08.mp4,0:16,9:09,False,False,biopsy 6:00,Eva,,,False
+S510872,is-cdp-s510872-ingest-ph/GA_TIDEWATER/PC151/202205/2022-05-0408-00-02_g_32.mp4,0:21,14:31,False,False,Polypectomy: (1) 8:17 (2) 12:50,David,,,False
+S167132,is-cdp-s167132-ingest-ph/ORANGEBURG/PC154/202205/2022-05-0408-00-03_c_01.mp4,0:04,9:50,False,False,,Zaid,,,False
+S284442,is-cdp-s284442-ingest-ph/GLY/PC112/202202/2022-02-2207-45-05_v_08_7900.17.mp4,00:27,14:12,,,,Pratik,,,False
+S666323,is-cdp-s666323-ingest-ph/AIR/Lancaster/LT113/2022-02-0715-05-38-1664036.mp4,,09:47,,,biopsy taken 05:42,Dan,,,True
+S143500,is-cdp-s143500-ingest-ph/myrtlesc/PC155/202205/2022-05-1108-00-01_v_17.mp4,0:26,16:33,,,Polypectomy at 6:20,Pratik,,,False
+S143500,is-cdp-s143500-ingest-ph/myrtlesc/PC155/202205/2022-05-1008-00-02_f_05.mp4,,,True,,,Pratik,,,True
+S510872,is-cdp-s510872-ingest-ph/GA_TIDEWATER/PC151/202205/2022-05-0408-00-02_g_24.mp4,0:32,26:01:00,False,False,Polypectomy: (1) 9:27 (2) 14:20,David,,,False
+S656189,is-cdp-s656189-ingest-ph/Endo/PC118/202202/2022-02-1708-00-07_m_11_22530.8.mp4,,,True,False,,Abbey,,,True
+S510872,is-cdp-s510872-ingest-ph/GA_TIDEWATER/PC151/202205/2022-05-0308-00-02_n_05.mp4,0:06,8:26,False,False,,Zaid,,,False
+S690122,is-cdp-s690122-ingest-ph/a1springtx/PC128/202207/2022-07-1107-21-18_c_01_5900.17.mp4,02:20,12:32,False,FALSE,,Zaid,,,False
+S920842,is-cdp-s920842-ingest-ph/Guilford/PC126/202206/2022-06-2308-08-09_y_01_0.mp4,,4:05,,,no PHI,David,Pratik,Good,True
+S862973,is-cdp-s862973-ingest-ph/CUMBERLAND/PC144/202204/2022-04-1414-05-32_o_01.mp4,,,,,colonoscopy procedure youtube video?,Eva,,,True
+S830922,is-cdp-s830922-ingest-ph/tampabayfl/PC188/202208/2022-08-0407-00-01_k_02_2182.83.mp4,,,True,FALSE,,Eva,,,True
+S531414,is-cdp-s531414-ingest-ph/Lubbock/PC127/202206/2022-06-1007-00-05_t_02_13722.8.mp4,,,True,False,,David,,,True
+S167132,is-cdp-s167132-ingest-ph/ORANGEBURG/PC154/202205/2022-05-1108-00-03_f_07.mp4,0:26,8:06,False,False,,Zaid,,,False
+S656189,is-cdp-s656189-ingest-ph/Endo/PC118/202202/2022-02-2509-54-30_t_03_4111.5.mp4,0:05,28:02:00,False,False,"biopsy 5:00, 7:40, 9:51, 11:05, 19:35, 21:11, 21:56, 24:29, 25:46",Eva,,,False
+S920842,is-cdp-s920842-ingest-ph/Guilford/PC126/202206/2022-06-2407-00-07_i_20_15746.8.mp4,00:24,10:45,,,,Abbey,,,False
+S284442,is-cdp-s284442-ingest-ph/GLY/PC112/202201/2022-01-2407-45-06_c_01_1048.83.mp4,,,,TRUE,multiple small entry times,Sanki,,,True
+S586353,is-cdp-s586353-ingest-ph/Velocity_Spokane/PC143/202204/2022-04-2808-00-02_d_05.mp4,0:18,10:20,,,,Pratik,,,False
+S167132,is-cdp-s167132-ingest-ph/ORANGEBURG/PC154/202205/2022-05-0408-00-03_c_04.mp4,0:48,26:11:00,False,False,,Zaid,,,False
+S652713,is-cdp-s652713-ingest-ph/Atlanta/PC115/202202/2022-02-0208-00-05_o_07_4138.83.mp4,09:39,25:43,False,False,polypectomy @ 15:11,Abbey,,,False
+S862973,is-cdp-s862973-ingest-ph/CUMBERLAND/PC144/202205/2022-05-1007-00-01_e_02.mp4,0:59,11:02,False,False,"4:15, 5:01, 5:40, 6:28, 7:42, ",Eva,,,False
+S920842,is-cdp-s920842-ingest-ph/Guilford/PC126/202206/2022-06-2811-04-39_f_03_668.167.mp4,,,,TRUE,,Abbey,,,True
+S830922,is-cdp-s830922-ingest-ph/tampabayfl/PC188/202208/2022-08-0507-00-04_m_04_6932.83.mp4,1:22,37:55,False,FALSE,"biopsy 14:09, 15:32, 32:20, 36:05,",Eva,,,False
+S510872,is-cdp-s510872-ingest-ph/GA_TIDEWATER/PC151/202205/2022-05-0308-00-02_n_18.mp4,,,True,False,,David,,,True
+S862973,is-cdp-s862973-ingest-ph/CUMBERLAND/PC144/202205/2022-05-1007-00-01_e_06.mp4,0:59,15:17,False,False,"biopsy 5:51, 10:07, 13:13; erosions in rectum",Eva,,,False
+S510872,is-cdp-s510872-ingest-ph/GA_TIDEWATER/PC151/202205/2022-05-0408-00-02_g_18.mp4,0:17,21:34,False,False,Polypectomy: (1) 20:34,David,,,False
+S531414,is-cdp-s531414-ingest-ph/Lubbock/PC127/202205/2022-05-1312-40-42_u_05_4698.83.mp4,,10:35,False,False,Polypectomy: (1) 6:38,David,,,True
+S149445,is-cdp-s149445-ingest-ph/clemsonsc/PC161/202207/2022-07-1107-00-03_o_11_13181.5.mp4,0:49,12:38,False,False,,Zaid,,,False
+S862973,is-cdp-s862973-ingest-ph/CUMBERLAND/PC144/202205/2022-05-0905-00-03_e_13.mp4,,,True,False,,Eva,Pratik,Good,True
+S149445,is-cdp-s149445-ingest-ph/clemsonsc/PC161/202207/2022-07-1107-00-03_o_20_23008.2.mp4,0:26,10:43,False,False,,Zaid,,,False
+S830922,is-cdp-s830922-ingest-ph/tampabayfl/PC188/202208/2022-08-0807-00-03_h_02_1004.83.mp4,0:11,30:25,,,,David,,,False
+S652713,is-cdp-s652713-ingest-ph/Atlanta/PC115/202205/2022-05-1808-00-07_e_03_22831.5.mp4,0:19,,False,False,,Abbey,Pratik,,False
+S920842,is-cdp-s920842-ingest-ph/Guilford/PC126/202206/2022-06-2707-00-08_z_04_5989.5.mp4,,,,TRUE,,Abbey,,,True
+S830922,is-cdp-s830922-ingest-ph/tampabayfl/PC188/202208/2022-08-0807-00-03_h_13_13266.2.mp4,0:12,33:12,,TRUE,Polypectomy: (1) 10:36 (2) 16:44 (3) 28:23. Entry (2) 33:20 Exit (2) 33:27,David,,,False
+S666323,is-cdp-s666323-ingest-ph/AIR/Lancaster/LT113/2022-06-0712-23-08.mp4,,,,,,Zaid,,,True
+S666323,is-cdp-s666323-ingest-ph/AIR/Lancaster/LT113/2022-06-2712-18-47.mp4,00:01,10:11,False,FALSE,,Zaid,,,False
+S830922,is-cdp-s830922-ingest-ph/tampabayfl/PC188/202208/2022-08-0807-00-03_h_06_5095.5.mp4,0:08,13:04,,,,David,,,False
+S830922,is-cdp-s830922-ingest-ph/tampabayfl/PC188/202208/2022-08-0507-00-04_m_11_18873.5.mp4,1:32,26:38,,,Polypectomy: (1) 10:04 (2) 14:46 (3) 17:56 (4) 18:58 (5) 22:23,David,,,False
+S862973,is-cdp-s862973-ingest-ph/CUMBERLAND/PC144/202205/2022-05-0905-00-03_e_14.mp4,0:15,,False,False,biopsy 5:00; no scope exit,Eva,,,False
+S690122,is-cdp-s690122-ingest-ph/a1springtx/PC128/202208/2022-08-1507-00-09_t_02_16952.8.mp4,01:30,10:18,False,FALSE,,Zaid,,,False
+S149445,is-cdp-s149445-ingest-ph/clemsonsc/PC161/202207/2022-07-1107-00-03_o_02_5182.83.mp4,0:38,13:56,,,"Polypectomy at 9:14, 12:30,",Pratik,,,False
+S666323,is-cdp-s666323-ingest-ph/AIR/Lancaster/LT113/2022-02-1012-42-27-1659642.mp4,00:06,,,,"biopsy taken 07:06, 09:12, 10:16, 13:01, 15:22",Dan,,,False
+S149445,is-cdp-s149445-ingest-ph/clemsonsc/PC161/202207/2022-07-0507-00-03_u_09_9032.83.mp4,,,True,,,Pratik,,,True
+S284442,is-cdp-s284442-ingest-ph/GLY/PC112/202202/2022-02-1107-45-04_r_08_12036.2.mp4,00:11,08:43,False,FALSE,,Sanki,,,False
+S149445,is-cdp-s149445-ingest-ph/clemsonsc/PC161/202207/2022-07-1107-00-03_o_04_7048.83.mp4,0:46,13:20,,,,Pratik,,,False
