@@ -39,14 +39,9 @@ class EntryExitInference(InferenceModel):
         active_preds = F.softmax(active_preds)
         active_preds = active_preds.numpy()
         active_preds = self.moving_average(active_preds, n=15)
-        # active_preds = self.threshold(active_preds)
-        return active_preds
-        # active_preds = np.where(active_preds == 1)[0]  # list of indices where preds are 1 
-        # print('INDICES OF PREDS ARE', active_preds)
-        # print('LEN OF ACTIVE_PREDS/TIMES ARE', len(active_preds), len(times))
-        # # Return time index of entry prediction and last entry prediction
-        # # If we find predictions
-        # return times[active_preds[0]], times[active_preds[-1]] if len(active_preds) >= 2 else np.nan, np.nan 
+        active_preds = self.threshold(active_preds)
+        active_preds = np.where(active_preds == 1)[0]  # list of indices where preds are 1 
+        return times[active_preds[0]], times[active_preds[-1]] if len(active_preds) >= 2 else np.nan, np.nan 
         
 
 if __name__ == "__main__":
