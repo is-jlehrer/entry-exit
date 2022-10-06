@@ -66,6 +66,7 @@ def decomp_all_from_one_vid(vid_row, local_path, format, outside_prop, inside_pr
     outside_sample_rate = 1 // outside_prop
     inside_sample_rate = 1 // inside_prop
 
+    print(f'Outside sample rate is {outside_sample_rate} and inside sample rate is {inside_sample_rate}')
     print("Performing decomp")
     while success:
         if frame_number % (outside_sample_rate if not in_procedure else inside_sample_rate) == 0:
