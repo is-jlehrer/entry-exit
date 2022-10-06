@@ -15,8 +15,8 @@ if __name__ == "__main__":
     # perform decomp for each video
     handler = DecompFromDataFrame(
         files=format_data_csv(os.path.join(curr, 'combined_data.csv')),
-        frames_per_clip=10,
-        frames_per_nonclip=10,
+        frames_per_clip=500,
+        frames_per_nonclip=500,
         local_path=os.path.join(DECOMP_PATH),
         img_format=".jpg",
         val_prop=0.2,

@@ -3,7 +3,7 @@ import pandas as pd
 import pathlib 
 
 curr = pathlib.Path(__file__).parent.resolve()
-DECOMP_PATH = os.path.join(curr, 'decomp_400_frames_balanced')
+DECOMP_PATH = os.path.join(curr, 'decomp_500_balanced')
 
 def convert_to_ms(time):
     # Time is formatted like: '1:03' or '01:03'
