@@ -3,7 +3,7 @@ import pandas as pd
 import pathlib 
 
 curr = pathlib.Path(__file__).parent.resolve()
-DECOMP_PATH = os.path.join(curr, 'decomp_combined_500_per')
+DECOMP_PATH = os.path.join(curr, 'decomp_by_percentage')
 
 def convert_to_ms(time):
     # Time is formatted like: '1:03' or '01:03'

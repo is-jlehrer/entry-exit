@@ -172,7 +172,7 @@ if __name__ == "__main__":
 
     decomp_all_files(
         train,
-        local_path=os.path.join(curr, "..", "full_decomp", "train"),
+        local_path=os.path.join(DECOMP_PATH, "train"),
         n_workers=8,
         format=".png",
         outside_prop=outside,
@@ -180,7 +180,7 @@ if __name__ == "__main__":
     )
     decomp_all_files(
         val,
-        local_path=os.path.join(curr, "..", "full_decomp", "val"),
+        local_path=os.path.join(DECOMP_PATH, "val"),
         n_workers=8,
         format=".png",
         outside_prop=outside,
@@ -188,7 +188,7 @@ if __name__ == "__main__":
     )
     decomp_all_files(
         test,
-        local_path=os.path.join(curr, "..", "full_decomp", "test"),
+        local_path=os.path.join(DECOMP_PATH, "test"),
         n_workers=8,
         format=".png",
         outside_prop=outside,
