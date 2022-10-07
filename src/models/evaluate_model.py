@@ -43,7 +43,7 @@ class EntryExitInference(InferenceModel):
         # active_preds = self.threshold(active_preds)
         # active_preds = np.where(active_preds == 1)[0]  # list of indices where preds are 1 
         # return times[active_preds[0]], times[active_preds[-1]] if len(active_preds) >= 2 else np.nan, np.nan 
-        
+        return active_preds
 
 if __name__ == "__main__":
     model = models.resnet18()
@@ -57,7 +57,7 @@ if __name__ == "__main__":
     holdout_csv = format_data_csv(os.path.join(here, '..', 'data', 'test_na_stratified.csv'))
 
     preds = inference_wrapper.predict_from_uris(
-        uri_list=holdout_csv["origin_uri"].values[0:10],
+        uri_list=holdout_csv["origin_uri"].values[0:2],
         local_path=os.path.join(here, '..', 'data', 'holdout'),
         sample_rate=10,  # predict every 50 frames
         batch_size=64,
