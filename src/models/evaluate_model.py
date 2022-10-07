@@ -58,16 +58,14 @@ if __name__ == "__main__":
     holdout_csv = format_data_csv(os.path.join(here, '..', 'data', 'test_na_stratified.csv'))
 
     preds = inference_wrapper.predict_from_uris(
-        uri_list=holdout_csv["origin_uri"].values[0:2],
+        uri_list=holdout_csv["origin_uri"].values,
         local_path=os.path.join(here, '..', 'data', 'holdout'),
-        sample_rate=10,  # predict every 50 frames
+        sample_rate=10,  # predict every 10 frames
         batch_size=64,
-        end_frame=100,
     )
 
     preds = pd.DataFrame(preds)
     preds.to_csv(os.path.join(here, 'model_results.csv'))
-
 
     # pred_entry = [x[0] for x in preds]
     # pred_exit = [x[1] for x in preds]
