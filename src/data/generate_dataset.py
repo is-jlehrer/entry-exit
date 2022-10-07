@@ -60,7 +60,7 @@ def decomp_all_from_one_vid(vid_row, local_path, format, outside_prop, inside_pr
     try:
         cap = cv.VideoCapture(local)
     except Exception as e:
-        logging.log(f"Error when doing cv.VideoCapture on {local}")
+        logging.exception(f"Error when doing cv.VideoCapture on {local}")
 
     outside_path = "outside"
     inside_path = "inside"
@@ -113,6 +113,7 @@ def decomp_all_from_one_vid(vid_row, local_path, format, outside_prop, inside_pr
         frame_number += 1
         success = cap.grab()
 
+    cap.release()
     logging.log("Done, deleting video")
     os.remove(local)
 
@@ -137,7 +138,7 @@ def decomp_all_files(files, n_workers, local_path, format, outside_prop, inside_
             for future in concurrent.futures.as_completed(futures):
                 pbar.update(1)
                 if future.exception():
-                    logging.log(f"Exception at {future}, {future.exception()}")
+                    logging.exception(f"Exception at {future}, {future.exception()}")
 
 
 if __name__ == "__main__":
