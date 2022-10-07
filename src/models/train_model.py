@@ -46,10 +46,10 @@ def generate_dataloaders():
     }
 
     train = StandardImageDataset(
-        root=os.path.join(DECOMP_PATH, "train"), transform=transform["train"], label_map={"inside": 0, "outside": 1}
+        root=os.path.join(DECOMP_PATH, "train"), transform=transform["train"], label_map={"inside": 1, "outside": 0}
     )
     val = StandardImageDataset(
-        root=os.path.join(DECOMP_PATH, "val"), transform=transform["val"], label_map={"inside": 0, "outside": 1}
+        root=os.path.join(DECOMP_PATH, "val"), transform=transform["val"], label_map={"inside": 1, "outside": 0}
     )
 
     train = DataLoader(train, shuffle=True, batch_size=64, num_workers=32)
