@@ -13,9 +13,7 @@ import torch.optim as optim
 import torchvision.models as models
 from lightml.data.make_dataset import Loaders, StandardImageDataset
 from lightml.models.train_model import TrainModel
-from pytorch_lightning.callbacks import (EarlyStopping, LearningRateMonitor,
-                                         ModelCheckpoint,
-                                         StochasticWeightAveraging)
+from pytorch_lightning.callbacks import EarlyStopping, LearningRateMonitor, ModelCheckpoint, StochasticWeightAveraging
 from pytorch_lightning.loggers import WandbLogger
 from torch.utils.data import DataLoader
 from torchmetrics import Accuracy, F1Score, Precision, Recall
@@ -46,9 +44,13 @@ def generate_dataloaders():
             ]
         ),
     }
-    train = StandardImageDataset(root=os.path.join(DECOMP_PATH, "train"), transform=transform["train"],)
 
-    val = StandardImageDataset(root=os.path.join(DECOMP_PATH, "val"), transform=transform["val"],)
+    train = StandardImageDataset(
+        root=os.path.join(DECOMP_PATH, "train"), transform=transform["train"], label_map={"inside": 0, "outside": 1}
+    )
+    val = StandardImageDataset(
+        root=os.path.join(DECOMP_PATH, "val"), transform=transform["val"], label_map={"inside": 0, "outside": 1}
+    )
 
     train = DataLoader(train, shuffle=True, batch_size=64, num_workers=32)
     val = DataLoader(val, shuffle=False, batch_size=64, num_workers=32)
@@ -65,23 +67,37 @@ def generate_parser():
     parser.add_argument("--name", required=False, default="resnet18")
 
     parser.add_argument(
-        "--model", required=False, default="resnet18",
+        "--model",
+        required=False,
+        default="resnet18",
     )
 
     parser.add_argument(
-        "--batch-size", required=False, default=64, type=int,
+        "--batch-size",
+        required=False,
+        default=64,
+        type=int,
     )
 
     parser.add_argument(
-        "--lr", required=False, default=3e-4, type=float,
+        "--lr",
+        required=False,
+        default=3e-4,
+        type=float,
     )
 
     parser.add_argument(
-        "--momentum", required=False, default=1e-4, type=float,
+        "--momentum",
+        required=False,
+        default=1e-4,
+        type=float,
     )
 
     parser.add_argument(
-        "--weight-decay", required=False, default=1e-4, type=float,
+        "--weight-decay",
+        required=False,
+        default=1e-4,
+        type=float,
     )
 
     args = vars(parser.parse_args())
@@ -92,7 +108,7 @@ def generate_parser():
 if __name__ == "__main__":
     params = generate_parser()
     train, val = generate_dataloaders()
-        
+
     model = eval(f"models.{params['model']}()")
     model.fc = nn.Linear(in_features=model.fc.in_features, out_features=2)
 
