@@ -14,7 +14,13 @@ import pandas as pd
 import argparse
 from lightml.data.decomp import DecompFromDataFrame
 from utils import format_data_csv, DECOMP_PATH
+import logging
 
+logging.basicConfig(filename='new_decomp_logfile',
+                    filemode='a',
+                    format='%(asctime)s,%(msecs)d %(name)s %(levelname)s %(message)s',
+                    datefmt='%H:%M:%S',
+                    level=logging.DEBUG)
 curr = pathlib.Path(__file__).parent.resolve()
 
 client = boto3.client("s3")
@@ -51,7 +57,10 @@ def decomp_all_from_one_vid(vid_row, local_path, format, outside_prop, inside_pr
 
     print(f"Downloading {uri}")
     download_from_uri(uri, local)
-    cap = cv.VideoCapture(local)
+    try:
+        cap = cv.VideoCapture(local)
+    except Exception as e:
+        logging.log(f"Error when doing cv.VideoCapture on {local}")
 
     outside_path = "outside"
     inside_path = "inside"
