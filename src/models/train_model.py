@@ -7,6 +7,7 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 import argparse
 
+import numpy as np
 import torch
 import torch.nn as nn
 import torch.optim as optim
@@ -57,6 +58,13 @@ def generate_dataloaders():
 
     return train, val
 
+def calculate_weights(split):
+    n_inside = len(os.listdir(os.path.join(DECOMP_PATH, split, "inside")))
+    n_outside = len(os.listdir(os.path.join(DECOMP_PATH, split, "outside")))
+    s = n_inside + n_outside
+
+    return torch.from_numpy(np.array([s / (2 * n_outside), s / (2 * n_inside)]))
+
 
 def generate_parser():
     parser = argparse.ArgumentParser(
@@ -100,6 +108,12 @@ def generate_parser():
         type=float,
     )
 
+    parser.add_argument(
+        '--class-weights',
+        required=False,
+        default='store_true',
+    )
+
     args = vars(parser.parse_args())
 
     return args
@@ -107,6 +121,8 @@ def generate_parser():
 
 if __name__ == "__main__":
     params = generate_parser()
+    print('Default for weighted is', params["class-weights"])
+
     train, val = generate_dataloaders()
 
     model = eval(f"models.{params['model']}()")
@@ -146,7 +162,7 @@ if __name__ == "__main__":
         model_config={
             "optimizer": optimizer,
             "scheduler": optim.lr_scheduler.ReduceLROnPlateau(optimizer, factor=0.75),
-            "loss": nn.CrossEntropyLoss(),
+            "loss": nn.CrossEntropyLoss(weight=params["class-weights"] if "class_weights" in params else None),
             "metrics": {
                 "accuracy": Accuracy(average="macro", num_classes=2).to(device),
                 "precision": Precision(average="macro", num_classes=2).to(device),
@@ -156,4 +172,4 @@ if __name__ == "__main__":
         },
     )
 
-    train_handler.fit(train, val)
+    # train_handler.fit(train, val)
