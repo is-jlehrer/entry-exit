@@ -39,9 +39,9 @@ class EntryExitInference(InferenceModel):
         active_preds = F.softmax(active_preds)
         active_preds = active_preds.numpy()
         active_preds = self.moving_average(active_preds, n=15)
-        active_preds = self.threshold(active_preds)
-        active_preds = np.where(active_preds == 1)[0]  # list of indices where preds are 1 
-        return times[active_preds[0]], times[active_preds[-1]] if len(active_preds) >= 2 else np.nan, np.nan 
+        # active_preds = self.threshold(active_preds)
+        # active_preds = np.where(active_preds == 1)[0]  # list of indices where preds are 1 
+        # return times[active_preds[0]], times[active_preds[-1]] if len(active_preds) >= 2 else np.nan, np.nan 
         
 
 if __name__ == "__main__":
@@ -50,15 +50,15 @@ if __name__ == "__main__":
 
     inference_wrapper = EntryExitInference(
         base_model=model,
-        weights_path=os.path.join(here, 'default_checkpoints/model-epoch=10.ckpt'),
+        weights_path=os.path.join(here, 'resnet18-gpu-bigdecomp/model-epoch=19.ckpt'),
     )
 
-    holdout_csv = format_data_csv(os.path.join(here, '..', 'data', 'holdout_data.csv'))
+    holdout_csv = format_data_csv(os.path.join(here, '..', 'data', 'test_na_stratified.csv'))
 
     preds = inference_wrapper.predict_from_uris(
         uri_list=holdout_csv["origin_uri"].values[0:10],
         local_path=os.path.join(here, '..', 'data', 'holdout'),
-        sample_rate=50,  # predict every 50 frames
+        sample_rate=10,  # predict every 50 frames
         batch_size=64,
     )
 
