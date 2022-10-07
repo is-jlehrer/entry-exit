@@ -68,7 +68,7 @@ def decomp_all_from_one_vid(vid_row, local_path, format, outside_prop, inside_pr
     os.makedirs(os.path.join(local_path, inside_path), exist_ok=True)
 
     success = cap.grab()  # get the first frame
-    frame_number = 1  # Don't want first modulus check to be True
+    frame_number = 1
     total_saved = 0
     in_procedure = False
 
@@ -93,14 +93,14 @@ def decomp_all_from_one_vid(vid_row, local_path, format, outside_prop, inside_pr
                 impath = os.path.join(
                     local_path,
                     outside_path,
-                    f"{frame_number}{format}",
+                    f"{total_saved}_{frame_number}{format}",
                 )
             else:  # inside
                 in_procedure = True
                 impath = os.path.join(
                     local_path,
                     inside_path,
-                    f"{frame_number}{format}",
+                    f"{total_saved}_{frame_number}{format}",
                 )
 
             #  CV2 saves to BGR, PIL.Image uses RGB so we need to convert
