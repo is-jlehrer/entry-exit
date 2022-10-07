@@ -154,7 +154,6 @@ if __name__ == "__main__":
                 # EarlyStopping(monitor="val_loss", patience=5),
                 StochasticWeightAveraging(swa_lrs=0.01),
             ],
-            "log_every_n_steps": 20,
             "track_grad_norm": 2,
             "accelerator": "gpu",
             "devices": 1,
