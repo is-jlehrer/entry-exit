@@ -46,8 +46,7 @@ def download_from_uri(uri, local_path):
 
     return filename
 
-
-def decomp_all_from_one_vid(vid_row, local_path, format, outside_prop, inside_prop):
+def decomp_all_from_one_vid(vid_row, local_path, format, outside_prop, inside_prop, tag):
     st, et, uri, local = (
         vid_row["start_time"],
         vid_row["end_time"],
@@ -69,8 +68,8 @@ def decomp_all_from_one_vid(vid_row, local_path, format, outside_prop, inside_pr
 
     success = cap.grab()  # get the first frame
     frame_number = 1
-    total_saved = 0
     in_procedure = False
+    total_saved = 0
 
     outside_sample_rate = 1 // outside_prop
     inside_sample_rate = 1 // inside_prop
@@ -93,14 +92,14 @@ def decomp_all_from_one_vid(vid_row, local_path, format, outside_prop, inside_pr
                 impath = os.path.join(
                     local_path,
                     outside_path,
-                    f"{total_saved}_{frame_number}{format}",
+                    f"{tag}_{total_saved}_{frame_number}{format}",
                 )
             else:  # inside
                 in_procedure = True
                 impath = os.path.join(
                     local_path,
                     inside_path,
-                    f"{total_saved}_{frame_number}{format}",
+                    f"{tag}_{total_saved}_{frame_number}{format}",
                 )
 
             #  CV2 saves to BGR, PIL.Image uses RGB so we need to convert
@@ -123,16 +122,17 @@ def decomp_all_files(files, n_workers, local_path, format, outside_prop, inside_
     with tqdm.tqdm(total=len(files)) as pbar:
         with concurrent.futures.ThreadPoolExecutor(max_workers=n_workers) as executor:
             futures = []
-            for i in files.index:
+            for row in files.iterrows():
                 # More inefficient than apply but still < 200 vids generally. Slowdown is marginal
                 futures.append(
                     executor.submit(
                         decomp_all_from_one_vid,
-                        files.loc[i, :],
+                        row[1],
                         local_path,
                         format,
                         outside_prop,
                         inside_prop,
+                        row[0],
                     )
                 )
             for future in concurrent.futures.as_completed(futures):
