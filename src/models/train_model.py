@@ -161,7 +161,7 @@ if __name__ == "__main__":
         model_config={
             "optimizer": optimizer,
             "scheduler": optim.lr_scheduler.ReduceLROnPlateau(optimizer, factor=0.75),
-            "loss": nn.CrossEntropyLoss(weight=calculate_weights() if "class_weights" in params else None),
+            "loss": nn.CrossEntropyLoss(weight=calculate_weights() if params["class_weights"] else None),
             "metrics": {
                 "accuracy": Accuracy(average="macro", num_classes=2).to(device),
                 "precision": Precision(average="macro", num_classes=2).to(device),
