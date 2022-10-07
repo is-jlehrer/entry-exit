@@ -39,11 +39,12 @@ class EntryExitInference(InferenceModel):
         active_preds = torch.stack([x[1] for x in active_preds])
         active_preds = F.softmax(active_preds)
         active_preds = active_preds.numpy()
-        active_preds = self.moving_average(active_preds, n=15)
+        # active_preds = self.moving_average(active_preds, n=15)
         # active_preds = self.threshold(active_preds)
         # active_preds = np.where(active_preds == 1)[0]  # list of indices where preds are 1 
         # return times[active_preds[0]], times[active_preds[-1]] if len(active_preds) >= 2 else np.nan, np.nan 
         return active_preds
+
 
 if __name__ == "__main__":
     model = models.resnet18()
@@ -73,7 +74,7 @@ if __name__ == "__main__":
 
     # print(pred_entry, pred_exit)
     print(preds)
-    os.makedirs("distplots")
+    os.makedirs("distplots", exist_ok=True)
     for i, pred in enumerate(preds):
         plt.scatter(list(range(len(preds[i]))), preds[i])
         plt.savefig(f"distplots/pred_distribution_vid_{i}.png")
