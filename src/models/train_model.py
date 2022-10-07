@@ -58,12 +58,13 @@ def generate_dataloaders():
 
     return train, val
 
+
 def calculate_weights():
     n_inside = len(os.listdir(os.path.join(DECOMP_PATH, "train", "inside")))
     n_outside = len(os.listdir(os.path.join(DECOMP_PATH, "train", "outside")))
     s = n_inside + n_outside
 
-    return torch.from_numpy(np.array([s / (2 * n_outside), s / (2 * n_inside)]))
+    return torch.from_numpy(np.array([s / (2 * n_outside), s / (2 * n_inside)])).float()
 
 
 def generate_parser():
@@ -108,12 +109,7 @@ def generate_parser():
         type=float,
     )
 
-    parser.add_argument(
-        '--class-weights',
-        required=False,
-        default=False,
-        action='store_true'
-    )
+    parser.add_argument("--class-weights", required=False, default=False, action="store_true")
 
     args = vars(parser.parse_args())
 
@@ -126,7 +122,7 @@ if __name__ == "__main__":
 
     model = eval(f"models.{params['model']}()")
     model.fc = nn.Linear(in_features=model.fc.in_features, out_features=2)
-    print('Weights are', calculate_weights())
+    print("Weights are", calculate_weights())
 
     os.makedirs(os.path.join(here, params["name"]), exist_ok=True)
 
