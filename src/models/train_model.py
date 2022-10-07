@@ -111,7 +111,8 @@ def generate_parser():
     parser.add_argument(
         '--class-weights',
         required=False,
-        default='store_true',
+        default=False,
+        action='store_true'
     )
 
     args = vars(parser.parse_args())
@@ -121,7 +122,7 @@ def generate_parser():
 
 if __name__ == "__main__":
     params = generate_parser()
-    print('Default for weighted is', params["class-weights"])
+    print('Default for weighted is', params["class_weights"])
 
     train, val = generate_dataloaders()
 
