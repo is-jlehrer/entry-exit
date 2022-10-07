@@ -15,6 +15,7 @@ import torchmetrics
 import torchvision.models as models
 from lightml.models.predict_model import InferenceModel
 from utils import format_data_csv
+import pandas as pd
 
 here = pathlib.Path(__file__).parent.resolve()
 THRESH = 0.3
@@ -60,7 +61,12 @@ if __name__ == "__main__":
         local_path=os.path.join(here, '..', 'data', 'holdout'),
         sample_rate=10,  # predict every 50 frames
         batch_size=64,
+        end_frame=100,
     )
+
+    preds = pd.DataFrame(preds)
+    preds.to_csv(os.path.join(here, 'model_results.csv'))
+
 
     # pred_entry = [x[0] for x in preds]
     # pred_exit = [x[1] for x in preds]
