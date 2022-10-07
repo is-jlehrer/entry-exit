@@ -70,6 +70,7 @@ def decomp_all_from_one_vid(vid_row, local_path, format, outside_prop, inside_pr
     print("Performing decomp")
     while success:
         if frame_number % (outside_sample_rate if not in_procedure else inside_sample_rate) == 0:
+            print(f'Saving on frame {frame_number}')
             time = cap.get(cv.CAP_PROP_POS_MSEC)
             try:
                 success, img = cap.retrieve()
