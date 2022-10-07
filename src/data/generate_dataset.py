@@ -170,27 +170,28 @@ if __name__ == "__main__":
     val = format_data_csv(os.path.join(curr, "val_na_stratified.csv"))
     test = format_data_csv(os.path.join(curr, "test_na_stratified.csv"))
 
-    decomp_all_files(
-        train,
-        local_path=os.path.join(DECOMP_PATH, "train"),
-        n_workers=8,
-        format=".png",
-        outside_prop=outside,
-        inside_prop=inside,
-    )
-    decomp_all_files(
-        val,
-        local_path=os.path.join(DECOMP_PATH, "val"),
-        n_workers=8,
-        format=".png",
-        outside_prop=outside,
-        inside_prop=inside,
-    )
-    decomp_all_files(
-        test,
-        local_path=os.path.join(DECOMP_PATH, "test"),
-        n_workers=8,
-        format=".png",
-        outside_prop=outside,
-        inside_prop=inside,
-    )
+    decomp_all_from_one_vid(train.loc[0, :], local_path='test', format='.jpg', outside_prop=0.5, inside_prop=1)
+    # decomp_all_files(
+    #     train,
+    #     local_path=os.path.join(DECOMP_PATH, "train"),
+    #     n_workers=8,
+    #     format=".png",
+    #     outside_prop=outside,
+    #     inside_prop=inside,
+    # )
+    # decomp_all_files(
+    #     val,
+    #     local_path=os.path.join(DECOMP_PATH, "val"),
+    #     n_workers=8,
+    #     format=".png",
+    #     outside_prop=outside,
+    #     inside_prop=inside,
+    # )
+    # decomp_all_files(
+    #     test,
+    #     local_path=os.path.join(DECOMP_PATH, "test"),
+    #     n_workers=8,
+    #     format=".png",
+    #     outside_prop=outside,
+    #     inside_prop=inside,
+    # )
