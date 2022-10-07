@@ -56,22 +56,17 @@ if __name__ == "__main__":
     )
 
     holdout_csv = format_data_csv(os.path.join(here, '..', 'data', 'test_na_stratified.csv'))
+    uris = holdout_csv["origin_uri"].values
 
     preds = inference_wrapper.predict_from_uris(
-        uri_list=holdout_csv["origin_uri"].values,
+        uri_list=uris,
         local_path=os.path.join(here, '..', 'data', 'holdout'),
-        sample_rate=10,  # predict every 10 frames
+        sample_rate=10,  # predict every 50 frames
         batch_size=64,
     )
 
     preds = pd.DataFrame(preds)
     preds.to_csv(os.path.join(here, 'model_results.csv'))
-
-    # pred_entry = [x[0] for x in preds]
-    # pred_exit = [x[1] for x in preds]
-
-    # print(pred_entry, pred_exit)
-    print(preds)
     os.makedirs("distplots", exist_ok=True)
     for i, pred in enumerate(preds):
         plt.scatter(list(range(len(preds[i]))), preds[i])
