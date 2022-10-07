@@ -58,9 +58,9 @@ def generate_dataloaders():
 
     return train, val
 
-def calculate_weights(split):
-    n_inside = len(os.listdir(os.path.join(DECOMP_PATH, split, "inside")))
-    n_outside = len(os.listdir(os.path.join(DECOMP_PATH, split, "outside")))
+def calculate_weights():
+    n_inside = len(os.listdir(os.path.join(DECOMP_PATH, "train", "inside")))
+    n_outside = len(os.listdir(os.path.join(DECOMP_PATH, "train", "outside")))
     s = n_inside + n_outside
 
     return torch.from_numpy(np.array([s / (2 * n_outside), s / (2 * n_inside)]))
@@ -122,13 +122,12 @@ def generate_parser():
 
 if __name__ == "__main__":
     params = generate_parser()
-    print('Default for weighted is', params["class_weights"])
-
     train, val = generate_dataloaders()
 
     model = eval(f"models.{params['model']}()")
     model.fc = nn.Linear(in_features=model.fc.in_features, out_features=2)
-
+    print('Weights are', calculate_weights())
+    
     os.makedirs(os.path.join(here, params["name"]), exist_ok=True)
 
     device = "cuda:0" if torch.cuda.is_available() else "cpu"
@@ -163,7 +162,7 @@ if __name__ == "__main__":
         model_config={
             "optimizer": optimizer,
             "scheduler": optim.lr_scheduler.ReduceLROnPlateau(optimizer, factor=0.75),
-            "loss": nn.CrossEntropyLoss(weight=params["class-weights"] if "class_weights" in params else None),
+            "loss": nn.CrossEntropyLoss(weight=calculate_weights() if "class_weights" in params else None),
             "metrics": {
                 "accuracy": Accuracy(average="macro", num_classes=2).to(device),
                 "precision": Precision(average="macro", num_classes=2).to(device),
