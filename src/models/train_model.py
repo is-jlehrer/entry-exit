@@ -127,7 +127,7 @@ if __name__ == "__main__":
     model = eval(f"models.{params['model']}()")
     model.fc = nn.Linear(in_features=model.fc.in_features, out_features=2)
     print('Weights are', calculate_weights())
-    
+
     os.makedirs(os.path.join(here, params["name"]), exist_ok=True)
 
     device = "cuda:0" if torch.cuda.is_available() else "cpu"
@@ -172,4 +172,4 @@ if __name__ == "__main__":
         },
     )
 
-    # train_handler.fit(train, val)
+    train_handler.fit(train, val)
