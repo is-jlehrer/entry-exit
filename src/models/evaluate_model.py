@@ -33,7 +33,7 @@ class EntryExitInference(InferenceModel):
         return 1 if x > THRESH else 0
 
     def postprocess(self, outputs):
-        # Instead of keeping logits [class_0_logit, class_1_logit], just take class 0
+        # Instead of keeping logits [class_0_logit, class_1_logit], just take class 1
         active_preds, times = outputs
         
         active_preds = torch.stack([x[1] for x in active_preds])
@@ -52,7 +52,7 @@ if __name__ == "__main__":
 
     inference_wrapper = EntryExitInference(
         base_model=model,
-        weights_path=os.path.join(here, 'resnet18-gpu-bigdecomp/model-epoch=19.ckpt'),
+        weights_path=os.path.join(here, 'resnet50-longtrain/model-epoch=42.ckpt'),
     )
 
     holdout_csv = format_data_csv(os.path.join(here, '..', 'data', 'test_na_stratified.csv'))
@@ -61,12 +61,12 @@ if __name__ == "__main__":
     preds = inference_wrapper.predict_from_uris(
         uri_list=uris,
         local_path=os.path.join(here, '..', 'data', 'holdout'),
-        sample_rate=10,  # predict every 50 frames
+        sample_rate=5,  # predict every 50 frames
         batch_size=64,
     )
 
     preds = pd.DataFrame(preds)
-    preds.to_csv(os.path.join(here, 'model_results.csv'))
+    preds.to_csv(os.path.join(here, 'model_results_sample_rate_5_resnet50_longtrain_epoch_42.csv'))
     os.makedirs("distplots", exist_ok=True)
     for i, pred in enumerate(preds):
         plt.scatter(list(range(len(preds[i]))), preds[i])
