@@ -33,7 +33,7 @@ def generate_dataloaders():
                 transforms.CenterCrop(224),
                 transforms.RandomHorizontalFlip(),
                 transforms.ColorJitter(),
-                transforms.RandomRotation(),
+                transforms.RandomRotation(30), # 30 degrees
                 transforms.RandomVerticalFlip(),
                 transforms.ToTensor(),
                 transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225]),
