@@ -108,7 +108,7 @@ def generate_parser():
     parser.add_argument(
         "--weight-decay",
         required=False,
-        default=1e-4,
+        default=1e-5,
         type=float,
     )
 
