@@ -27,11 +27,6 @@ class EntryExitInference(InferenceModel):
         ret[n:] = ret[n:] - ret[:-n]
         return ret[n - 1:] / n
 
-    @staticmethod
-    @np.vectorize
-    def threshold(x):
-        return 1 if x > THRESH else 0
-
     def postprocess(self, outputs):
         # Instead of keeping logits [class_0_logit, class_1_logit], just take class 1
         active_preds, times = outputs
@@ -39,10 +34,7 @@ class EntryExitInference(InferenceModel):
         active_preds = torch.stack([x[1] for x in active_preds])
         active_preds = F.softmax(active_preds)
         active_preds = active_preds.numpy()
-        # active_preds = self.moving_average(active_preds, n=15)
-        # active_preds = self.threshold(active_preds)
-        # active_preds = np.where(active_preds == 1)[0]  # list of indices where preds are 1 
-        # return times[active_preds[0]], times[active_preds[-1]] if len(active_preds) >= 2 else np.nan, np.nan 
+
         return (active_preds, times)
 
 
@@ -55,7 +47,7 @@ if __name__ == "__main__":
         weights_path=os.path.join(here, 'resnet18-gpu-bigdecomp/model-epoch=26.ckpt'),
     )
 
-    holdout_csv = format_data_csv(os.path.join(here, '..', 'data', 'test_na_stratified.csv'))
+    holdout_csv = format_data_csv(os.path.join(here, '..', 'data', 'val_na_stratified.csv'))
     uris = holdout_csv["origin_uri"].values
 
     preds = inference_wrapper.predict_from_uris(
@@ -65,12 +57,10 @@ if __name__ == "__main__":
         batch_size=64,
     )
     
-    probas = [x[0] for x in preds]
-    times = [x[1] for x in preds]
+    probas = pd.DataFrame([x[0] for x in preds])
+    times = pd.DataFrame([x[1] for x in preds])
 
-    preds = pd.DataFrame(preds)
-    times = pd.DataFrame(times)
-    preds.to_csv(os.path.join(here, 'model_results_sample_rate_5_resnet18_500k_decomp.csv'))
+    probas.to_csv(os.path.join(here, 'model_results_sample_rate_5_resnet18_500k_decomp.csv'))
     times.to_csv(os.path.join(here, 'times_results_sample_rate_5_resnet18_500k_decomp.csv'))
 
 
