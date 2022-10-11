@@ -66,5 +66,5 @@ if __name__ == "__main__":
     times.index = uris
     os.makedirs(os.path.join(here, 'inference'), exist_ok=True)
 
-    probas.to_csv(os.path.join(here, 'inference/probs_validation_results_resnet50_longtrain.csv'))
-    times.to_csv(os.path.join(here, 'inference/times_validation_results_resnet50_longtrain.csv'))
+    probas.to_csv(os.path.join(here, 'inference/probs_validation_results_resnet50_longtrain_val.csv'))
+    times.to_csv(os.path.join(here, 'inference/times_validation_results_resnet50_longtrain_val.csv'))
