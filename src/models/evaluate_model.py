@@ -31,9 +31,9 @@ class EntryExitInference(InferenceModel):
         # Instead of keeping logits [class_0_logit, class_1_logit], just take class 1
         active_preds, times = outputs
         
-        active_preds = torch.stack([x[1] for x in active_preds])
         active_preds = F.softmax(active_preds, dim=-1)
-        active_preds = active_preds.detach().cpu().numpy() 
+        active_preds = torch.stack([x[1] for x in active_preds])
+        active_preds = active_preds.detach().cpu().numpy()
         
         return (active_preds, times)
 
@@ -55,16 +55,16 @@ if __name__ == "__main__":
     preds = inference_wrapper.predict_from_uris(
         uri_list=uris,
         local_path=os.path.join(here, '..', 'data', 'holdout'),
-        sample_rate=5,  # predict every 50 frames
+        sample_rate=10,
         batch_size=64,
     )
     
     probas = pd.DataFrame([x[0] for x in preds])
     times = pd.DataFrame([x[1] for x in preds])
 
-    probas.index = uris 
-    times.index = uris 
-    os.makedirs(here, 'inference', exist_ok=True)
-    
+    probas.index = uris
+    times.index = uris
+    os.makedirs(os.path.join(here, 'inference'), exist_ok=True)
+
     probas.to_csv(os.path.join(here, 'inference/probs_validation_results_resnet50_longtrain.csv'))
     times.to_csv(os.path.join(here, 'inference/times_validation_results_resnet50_longtrain.csv'))
