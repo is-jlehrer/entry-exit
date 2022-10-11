@@ -62,5 +62,8 @@ if __name__ == "__main__":
     probas = pd.DataFrame([x[0] for x in preds])
     times = pd.DataFrame([x[1] for x in preds])
 
+    probas.index = uris 
+    times.index = uris 
+
     probas.to_csv(os.path.join(here, 'model_results_sample_rate_5_resnet50-longtrain.csv'))
     times.to_csv(os.path.join(here, 'times_results_sample_rate_5_resnet50-longtrain.csv'))
