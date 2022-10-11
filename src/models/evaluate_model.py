@@ -43,7 +43,7 @@ class EntryExitInference(InferenceModel):
         # active_preds = self.threshold(active_preds)
         # active_preds = np.where(active_preds == 1)[0]  # list of indices where preds are 1 
         # return times[active_preds[0]], times[active_preds[-1]] if len(active_preds) >= 2 else np.nan, np.nan 
-        return active_preds
+        return (active_preds, times)
 
 
 if __name__ == "__main__":
@@ -52,7 +52,7 @@ if __name__ == "__main__":
 
     inference_wrapper = EntryExitInference(
         base_model=model,
-        weights_path=os.path.join(here, 'resnet50-longtrain/model-epoch=42.ckpt'),
+        weights_path=os.path.join(here, 'resnet18-gpu-bigdecomp/model-epoch=26.ckpt'),
     )
 
     holdout_csv = format_data_csv(os.path.join(here, '..', 'data', 'test_na_stratified.csv'))
@@ -64,11 +64,13 @@ if __name__ == "__main__":
         sample_rate=5,  # predict every 50 frames
         batch_size=64,
     )
+    
+    probas = [x[0] for x in preds]
+    times = [x[1] for x in preds]
 
     preds = pd.DataFrame(preds)
-    preds.to_csv(os.path.join(here, 'model_results_sample_rate_5_resnet50_longtrain_epoch_42.csv'))
-    os.makedirs("distplots", exist_ok=True)
-    for i, pred in enumerate(preds):
-        plt.scatter(list(range(len(preds[i]))), preds[i])
-        plt.savefig(f"distplots/pred_distribution_vid_{i}.png")
-        plt.clf()
+    times = pd.DataFrame(times)
+    preds.to_csv(os.path.join(here, 'model_results_sample_rate_5_resnet18_500k_decomp.csv'))
+    times.to_csv(os.path.join(here, 'times_results_sample_rate_5_resnet18_500k_decomp.csv'))
+
+
