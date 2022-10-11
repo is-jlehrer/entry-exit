@@ -45,7 +45,7 @@ if __name__ == "__main__":
     inference_transform = get_transforms()["val"]
     inference_wrapper = EntryExitInference(
         base_model=model,
-        weights_path=os.path.join(here, 'resnet18-gpu-bigdecomp/model-epoch=26.ckpt'),
+        weights_path=os.path.join(here, 'resnet50-longtrain/model-epoch=200.ckpt'),
         transform=inference_transform,
     )
 
@@ -62,5 +62,5 @@ if __name__ == "__main__":
     probas = pd.DataFrame([x[0] for x in preds])
     times = pd.DataFrame([x[1] for x in preds])
 
-    probas.to_csv(os.path.join(here, 'model_results_sample_rate_5_resnet18_500k_decomp.csv'))
-    times.to_csv(os.path.join(here, 'times_results_sample_rate_5_resnet18_500k_decomp.csv'))
+    probas.to_csv(os.path.join(here, 'model_results_sample_rate_5_resnet50-longtrain.csv'))
+    times.to_csv(os.path.join(here, 'times_results_sample_rate_5_resnet50-longtrain.csv'))
