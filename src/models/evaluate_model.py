@@ -14,7 +14,7 @@ import torch.nn.functional as F
 import torchmetrics
 import torchvision.models as models
 from lightml.models.predict_model import InferenceModel
-from utils import format_data_csv
+from utils import format_data_csv, get_transforms
 import pandas as pd
 
 here = pathlib.Path(__file__).parent.resolve()
@@ -42,9 +42,11 @@ if __name__ == "__main__":
     model = models.resnet50()
     model.fc = nn.Linear(model.fc.in_features, 2)
 
+    inference_transform = get_transforms()["val"]
     inference_wrapper = EntryExitInference(
         base_model=model,
         weights_path=os.path.join(here, 'resnet18-gpu-bigdecomp/model-epoch=26.ckpt'),
+        transform=inference_transform,
     )
 
     holdout_csv = format_data_csv(os.path.join(here, '..', 'data', 'val_na_stratified.csv'))
@@ -62,5 +64,3 @@ if __name__ == "__main__":
 
     probas.to_csv(os.path.join(here, 'model_results_sample_rate_5_resnet18_500k_decomp.csv'))
     times.to_csv(os.path.join(here, 'times_results_sample_rate_5_resnet18_500k_decomp.csv'))
-
-

@@ -2,6 +2,8 @@ import os
 import pathlib
 import sys
 
+from src.utils import get_transforms
+
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 
@@ -18,37 +20,14 @@ from pytorch_lightning.callbacks import EarlyStopping, LearningRateMonitor, Mode
 from pytorch_lightning.loggers import WandbLogger
 from torch.utils.data import DataLoader
 from torchmetrics import Accuracy, F1Score, Precision, Recall
-from torchvision import transforms
 from torchvision.models import ConvNeXt_Large_Weights, ResNet18_Weights
 
 here = pathlib.Path(__file__).parent.resolve()
-from utils import DECOMP_PATH
+from utils import DECOMP_PATH, get_transforms
 
 
 def generate_dataloaders():
-    transform = {
-        "train": transforms.Compose(
-            [
-                transforms.Resize(256),
-                transforms.CenterCrop(224),
-                transforms.RandomHorizontalFlip(),
-                transforms.ColorJitter(),
-                transforms.RandomRotation(30), # 30 degrees
-                transforms.RandomVerticalFlip(),
-                transforms.ToTensor(),
-                transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225]),
-            ]
-        ),
-        "val": transforms.Compose(
-            [
-                transforms.Resize(256),
-                transforms.CenterCrop(224),
-                transforms.ToTensor(),
-                transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225]),
-            ]
-        ),
-    }
-
+    transform = get_transforms()
     train = StandardImageDataset(
         root=os.path.join(DECOMP_PATH, "train"), transform=transform["train"], label_map={"inside": 1, "outside": 0}
     )

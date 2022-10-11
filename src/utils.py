@@ -1,6 +1,7 @@
 import os
 import pandas as pd
 import pathlib 
+from torchvision import transforms
 
 curr = pathlib.Path(__file__).parent.resolve()
 DECOMP_PATH = os.path.join(curr, 'decomp_by_percentages')
@@ -42,3 +43,28 @@ def format_data_csv(path):
     return df
 
 
+def get_transforms():
+    transform = {
+        "train": transforms.Compose(
+            [
+                transforms.Resize(256),
+                transforms.CenterCrop(224),
+                transforms.RandomHorizontalFlip(),
+                transforms.ColorJitter(),
+                transforms.RandomRotation(30),  # 30 degrees
+                transforms.RandomVerticalFlip(),
+                transforms.ToTensor(),
+                transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225]),
+            ]
+        ),
+        "val": transforms.Compose(
+            [
+                transforms.Resize(256),
+                transforms.CenterCrop(224),
+                transforms.ToTensor(),
+                transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225]),
+            ]
+        ),
+    }
+
+    return transform
