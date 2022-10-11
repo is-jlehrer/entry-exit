@@ -20,7 +20,6 @@ from pytorch_lightning.callbacks import EarlyStopping, LearningRateMonitor, Mode
 from pytorch_lightning.loggers import WandbLogger
 from torch.utils.data import DataLoader
 from torchmetrics import Accuracy, F1Score, Precision, Recall
-from torchvision.models import ConvNeXt_Large_Weights, ResNet18_Weights
 
 here = pathlib.Path(__file__).parent.resolve()
 from utils import DECOMP_PATH, get_transforms
