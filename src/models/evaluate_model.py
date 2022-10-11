@@ -33,7 +33,7 @@ class EntryExitInference(InferenceModel):
         
         active_preds = torch.stack([x[1] for x in active_preds])
         active_preds = F.softmax(active_preds)
-        active_preds = active_preds.detach().cpu().numpy()
+        active_preds = active_preds.detach().cpu().numpy() 
 
         return (active_preds, times)
 
