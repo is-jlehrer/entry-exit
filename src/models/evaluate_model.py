@@ -34,7 +34,7 @@ class EntryExitInference(InferenceModel):
         active_preds = torch.stack([x[1] for x in active_preds])
         active_preds = F.softmax(active_preds)
         active_preds = active_preds.detach().cpu().numpy() 
-
+        
         return (active_preds, times)
 
 
@@ -52,18 +52,19 @@ if __name__ == "__main__":
     holdout_csv = format_data_csv(os.path.join(here, '..', 'data', 'val_na_stratified.csv'))
     uris = holdout_csv["origin_uri"].values
 
-    preds = inference_wrapper.predict_from_uris(
-        uri_list=uris,
-        local_path=os.path.join(here, '..', 'data', 'holdout'),
-        sample_rate=5,  # predict every 50 frames
-        batch_size=64,
-    )
-    
-    probas = pd.DataFrame([x[0] for x in preds])
-    times = pd.DataFrame([x[1] for x in preds])
+    for uri in uris:
+        preds = inference_wrapper.predict_from_uris(
+            uri_list=[uri],
+            local_path=os.path.join(here, '..', 'data', 'holdout'),
+            sample_rate=5,  # predict every 50 frames
+            batch_size=64,
+        )
+        
+        probas = pd.DataFrame([x[0] for x in preds])
+        times = pd.DataFrame([x[1] for x in preds])
 
-    probas.index = uris 
-    times.index = uris 
+        probas.index = [uri]
+        times.index = [uri] 
 
-    probas.to_csv(os.path.join(here, 'model_results_sample_rate_5_resnet50-longtrain.csv'))
-    times.to_csv(os.path.join(here, 'times_results_sample_rate_5_resnet50-longtrain.csv'))
+        probas.to_csv(os.path.join(here, 'model_results_sample_rate_5_resnet50-longtrain.csv'))
+        times.to_csv(os.path.join(here, 'times_results_sample_rate_5_resnet50-longtrain.csv'))
