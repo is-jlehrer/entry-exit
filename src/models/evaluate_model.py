@@ -47,7 +47,7 @@ class EntryExitInference(InferenceModel):
 
 
 if __name__ == "__main__":
-    model = models.resnet18()
+    model = models.resnet50()
     model.fc = nn.Linear(model.fc.in_features, 2)
 
     inference_wrapper = EntryExitInference(
