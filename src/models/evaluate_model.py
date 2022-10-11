@@ -52,7 +52,7 @@ if __name__ == "__main__":
     holdout_csv = format_data_csv(os.path.join(here, '..', 'data', 'val_na_stratified.csv'))
     uris = holdout_csv["origin_uri"].values
 
-    for uri in uris:
+    for idx, uri in enumerate(uris):
         preds = inference_wrapper.predict_from_uris(
             uri_list=[uri],
             local_path=os.path.join(here, '..', 'data', 'holdout'),
@@ -66,5 +66,5 @@ if __name__ == "__main__":
         probas.index = [uri]
         times.index = [uri] 
 
-        probas.to_csv(os.path.join(here, 'model_results_sample_rate_5_resnet50-longtrain.csv'))
-        times.to_csv(os.path.join(here, 'times_results_sample_rate_5_resnet50-longtrain.csv'))
+        probas.to_csv(os.path.join(here, f'model_results_sample_rate_5_resnet50-longtrain_{idx}.csv'))
+        times.to_csv(os.path.join(here, f'times_results_sample_rate_5_resnet50-longtrain_{idx}.csv'))
