@@ -14,7 +14,7 @@ def convert_to_ms(time):
     return 1000 * (m*60 + s)
 
 
-def format_data_csv(path):
+def format_data_csv(path, dropna=True):
     df = pd.read_csv(path)
 
     # Name start_time / end_time as required by lightml decomp
@@ -34,7 +34,8 @@ def format_data_csv(path):
     df["local_path"] = df["origin_uri"].apply(lambda x: os.path.join(DECOMP_PATH, x.split('/')[-1]))
 
     # Remove videos that start/end inside colon
-    df = df.dropna(subset=["start_time", "end_time"])
+    if dropna:
+        df = df.dropna(subset=["start_time", "end_time"])
     
     # Convert start time from MM:SS to milliseconds for lightml decomp
     df["start_time"] = df["start_time"].apply(lambda x: convert_to_ms(x))
