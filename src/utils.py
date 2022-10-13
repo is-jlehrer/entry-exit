@@ -5,8 +5,6 @@ import pathlib
 from torchvision import transforms
 
 curr = pathlib.Path(__file__).parent.resolve()
-DECOMP_PATH = os.path.join(curr, 'decomp_by_percentages')
-
 def convert_to_ms(time):
     # Time is formatted like: '1:03' or '01:03'
     
@@ -19,7 +17,7 @@ def convert_to_ms(time):
     return 1000 * (m*60 + s)
 
 
-def format_data_csv(path, dropna=True):
+def format_data_csv(path, decomp_path, dropna=True):
     df = pd.read_csv(path)
 
     # Name start_time / end_time as required by lightml decomp
@@ -36,7 +34,7 @@ def format_data_csv(path, dropna=True):
     df["value"] = ["procedure"]*len(df)
 
     # Define our local path to download uris to 
-    df["local_path"] = df["origin_uri"].apply(lambda x: os.path.join(DECOMP_PATH, x.split('/')[-1]))
+    df["local_path"] = df["origin_uri"].apply(lambda x: os.path.join(decomp_path, x.split('/')[-1]))
 
     # Remove videos that start/end inside colon
     if dropna:

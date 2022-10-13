@@ -13,7 +13,7 @@ import concurrent.futures
 import pandas as pd
 import argparse
 from lightml.data.decomp import DecompFromDataFrame
-from utils import format_data_csv, DECOMP_PATH
+from utils import format_data_csv
 import logging
 
 logging.basicConfig(filename='new_decomp_logfile',
@@ -161,16 +161,21 @@ if __name__ == "__main__":
         "--outside-prop",
         type=float,
         help="Proportion of frames to sample per video outside of the procedure",
-        default=0.6,
-        required=False,
+        required=True,
     )
 
     parser.add_argument(
         "--inside-prop",
         type=float,
         help="Proportion of frames to sample per video inside of the procedure",
-        default=0.2,
-        required=False,
+        required=True,
+    )
+
+    parser.add_argument(
+        '--path',
+        help='Path to do decomp to',
+        required=True,
+        type=str,
     )
 
     parser.add_argument(
