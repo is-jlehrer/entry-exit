@@ -3,6 +3,7 @@ inference_results/*
 dataframe_decomp.log
 data/decomp_100_frames*
 *.log 
+src/models/inference/* 
 wandb/*
 default_checkpoints/*
 ml_common/*

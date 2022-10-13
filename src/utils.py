@@ -1,4 +1,5 @@
 import os
+import numpy as np
 import pandas as pd
 import pathlib 
 from torchvision import transforms
@@ -8,6 +9,10 @@ DECOMP_PATH = os.path.join(curr, 'decomp_by_percentages')
 
 def convert_to_ms(time):
     # Time is formatted like: '1:03' or '01:03'
+    
+    if pd.isnull(time):
+        return np.nan
+
     time = time.replace(".", ":").split(":")
     m = int(time[0])
     s = int(time[1])
