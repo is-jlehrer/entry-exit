@@ -192,9 +192,9 @@ if __name__ == "__main__":
     os.makedirs(path, exist_ok=True)
 
     print("Reading in csv...")
-    train = format_data_csv(os.path.join(curr, "train_na_stratified.csv"))
-    val = format_data_csv(os.path.join(curr, "val_na_stratified.csv"))
-    test = format_data_csv(os.path.join(curr, "test_na_stratified.csv"))
+    train = format_data_csv(os.path.join(curr, "train_na_stratified.csv"), path)
+    val = format_data_csv(os.path.join(curr, "val_na_stratified.csv"), path)
+    test = format_data_csv(os.path.join(curr, "test_na_stratified.csv"), path)
 
     decomp_all_files(
         train,
