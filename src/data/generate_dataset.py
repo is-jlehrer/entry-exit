@@ -173,6 +173,14 @@ if __name__ == "__main__":
         required=False,
     )
 
+    parser.add_argument(
+        '--num-workers',
+        type=int,
+        default=8,
+        help="Number of processes to do decomp on",
+        required=False,
+    )
+
     args = parser.parse_args()
     outside, inside = args.outside_prop, args.inside_prop
 
