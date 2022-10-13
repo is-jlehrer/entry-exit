@@ -112,8 +112,7 @@ def decomp_all_from_one_vid(vid_row, local_path, format, outside_prop, inside_pr
         frame_number += 1
         success = cap.grab()
 
-    cap.release()
-    logging.log("Done, deleting video")
+    print("Done, deleting video")
     os.remove(local)
 
 
