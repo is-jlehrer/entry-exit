@@ -187,7 +187,9 @@ if __name__ == "__main__":
     )
 
     args = parser.parse_args()
-    outside, inside = args.outside_prop, args.inside_prop
+    outside, inside, path, num_workers = args.outside_prop, args.inside_prop, args.path, args.num_workers
+    print('Making decomp path')
+    os.makedirs(path, exist_ok=True)
 
     print("Reading in csv...")
     train = format_data_csv(os.path.join(curr, "train_na_stratified.csv"))
@@ -196,24 +198,24 @@ if __name__ == "__main__":
 
     decomp_all_files(
         train,
-        local_path=os.path.join(DECOMP_PATH, "train"),
-        n_workers=8,
+        local_path=os.path.join(path, "train"),
+        n_workers=num_workers,
         format=".png",
         outside_prop=outside,
         inside_prop=inside,
     )
     decomp_all_files(
         val,
-        local_path=os.path.join(DECOMP_PATH, "val"),
-        n_workers=8,
+        local_path=os.path.join(path, "val"),
+        n_workers=num_workers,
         format=".png",
         outside_prop=outside,
         inside_prop=inside,
     )
     decomp_all_files(
         test,
-        local_path=os.path.join(DECOMP_PATH, "test"),
-        n_workers=8,
+        local_path=os.path.join(path, "test"),
+        n_workers=num_workers,
         format=".png",
         outside_prop=outside,
         inside_prop=inside,
