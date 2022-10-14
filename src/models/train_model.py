@@ -30,9 +30,7 @@ def generate_dataloaders(path):
     train = StandardImageDataset(
         root=os.path.join(path, "train"), transform=transform["train"], label_map={"inside": 1, "outside": 0}
     )
-    val = StandardImageDataset(
-        root=os.path.join(path, "val"), transform=transform["val"], label_map={"inside": 1, "outside": 0}
-    )
+    val = StandardImageDataset(root=os.path.join(path, "val"), transform=transform["val"], label_map={"inside": 1, "outside": 0})
 
     train = DataLoader(train, shuffle=True, batch_size=64, num_workers=32)
     val = DataLoader(val, shuffle=False, batch_size=64, num_workers=32)
@@ -54,7 +52,7 @@ def generate_parser():
         Can specify weight decay, lr, and momentum as well."""
     )
 
-    parser.add_argument("--name", required=False, default="resnet18")
+    parser.add_argument("--name", required=True, type=str, help="Wandb run name and name of folder to save checkpoints to")
 
     parser.add_argument(
         "--model",
@@ -91,11 +89,11 @@ def generate_parser():
     )
 
     parser.add_argument(
-        '--dataset-path',
+        "--dataset-path",
         required=True,
         type=str,
     )
-    
+
     parser.add_argument("--class-weights", required=False, default=False, action="store_true")
 
     args = vars(parser.parse_args())
