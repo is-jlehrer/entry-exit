@@ -58,7 +58,6 @@ def decomp_all_from_one_vid(vid_row, local_path, format, outside_prop, inside_pr
     download_from_uri(uri, local)
     try:
         cap = cv.VideoCapture(local)
-
     except Exception as e:
         logging.exception(f"Error when doing cv.VideoCapture on {local}")
 

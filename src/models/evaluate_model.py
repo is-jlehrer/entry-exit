@@ -26,7 +26,7 @@ class EntryExitInference(InferenceModel):
     def moving_average(a, n=3):
         ret = np.cumsum(a, dtype=float)
         ret[n:] = ret[n:] - ret[:-n]
-        return ret[n - 1 :] / n
+        return ret[n - 1:] / n
 
     def postprocess(self, outputs):
         # Instead of keeping logits [class_0_logit, class_1_logit], just take class 1
