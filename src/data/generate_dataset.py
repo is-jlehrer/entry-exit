@@ -211,11 +211,11 @@ if __name__ == "__main__":
         outside_prop=outside,
         inside_prop=inside,
     )
-    decomp_all_files(
-        test,
-        local_path=os.path.join(path, "test"),
-        n_workers=num_workers,
-        format=".png",
-        outside_prop=outside,
-        inside_prop=inside,
-    )
+    # decomp_all_files(
+    #     test,
+    #     local_path=os.path.join(path, "test"),
+    #     n_workers=num_workers,
+    #     format=".png",
+    #     outside_prop=outside,
+    #     inside_prop=inside,
+    # )

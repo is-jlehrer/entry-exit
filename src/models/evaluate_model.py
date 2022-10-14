@@ -56,7 +56,7 @@ if __name__ == "__main__":
     preds = inference_wrapper.predict_from_uris(
         uri_list=uris,
         local_path=os.path.join(here, '..', 'data', 'holdout'),
-       sample_rate=10,  # predict every 50 frames
+        sample_rate=10,  # predict every 50 frames
         batch_size=64,
     )
     

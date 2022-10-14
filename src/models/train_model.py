@@ -22,16 +22,16 @@ from torch.utils.data import DataLoader
 from torchmetrics import Accuracy, F1Score, Precision, Recall
 
 here = pathlib.Path(__file__).parent.resolve()
-from utils import DECOMP_PATH, get_transforms
+from utils import get_transforms
 
 
-def generate_dataloaders():
+def generate_dataloaders(path):
     transform = get_transforms()
     train = StandardImageDataset(
-        root=os.path.join(DECOMP_PATH, "train"), transform=transform["train"], label_map={"inside": 1, "outside": 0}
+        root=os.path.join(path, "train"), transform=transform["train"], label_map={"inside": 1, "outside": 0}
     )
     val = StandardImageDataset(
-        root=os.path.join(DECOMP_PATH, "val"), transform=transform["val"], label_map={"inside": 1, "outside": 0}
+        root=os.path.join(path, "val"), transform=transform["val"], label_map={"inside": 1, "outside": 0}
     )
 
     train = DataLoader(train, shuffle=True, batch_size=64, num_workers=32)
@@ -40,9 +40,9 @@ def generate_dataloaders():
     return train, val
 
 
-def calculate_weights():
-    n_inside = len(os.listdir(os.path.join(DECOMP_PATH, "train", "inside")))
-    n_outside = len(os.listdir(os.path.join(DECOMP_PATH, "train", "outside")))
+def calculate_weights(path):
+    n_inside = len(os.listdir(os.path.join(path, "train", "inside")))
+    n_outside = len(os.listdir(os.path.join(path, "train", "outside")))
     s = n_inside + n_outside
 
     return torch.from_numpy(np.array([s / (2 * n_outside), s / (2 * n_inside)])).float()
@@ -90,6 +90,12 @@ def generate_parser():
         type=float,
     )
 
+    parser.add_argument(
+        '--dataset-path',
+        required=True,
+        type=str,
+    )
+    
     parser.add_argument("--class-weights", required=False, default=False, action="store_true")
 
     args = vars(parser.parse_args())
