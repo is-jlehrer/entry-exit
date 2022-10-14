@@ -5,7 +5,7 @@ import sys
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 import argparse
-
+from tqdm import tqdm
 import numpy as np
 import torch
 import torch.nn as nn
@@ -103,7 +103,7 @@ def generate_parser():
 def calculate_mean_std(loader):
     mean = 0.
     std = 0.
-    for i, (images, _) in enumerate(loader):
+    for i, (images, _) in enumerate(tqdm(loader)):
         if i == 100:
             break
         batch_samples = images.size(0)  # batch size (the last batch can have smaller size!)
