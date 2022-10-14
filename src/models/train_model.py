@@ -13,7 +13,9 @@ import torch.optim as optim
 import torchvision.models as models
 from lightml.data.make_dataset import Loaders, StandardImageDataset
 from lightml.models.train_model import TrainModel
-from pytorch_lightning.callbacks import EarlyStopping, LearningRateMonitor, ModelCheckpoint, StochasticWeightAveraging
+from pytorch_lightning.callbacks import (EarlyStopping, LearningRateMonitor,
+                                         ModelCheckpoint,
+                                         StochasticWeightAveraging)
 from pytorch_lightning.loggers import WandbLogger
 from torch.utils.data import DataLoader
 from torchmetrics import Accuracy, F1Score, Precision, Recall
@@ -100,11 +102,11 @@ def generate_parser():
 
 if __name__ == "__main__":
     params = generate_parser()
-    train, val = generate_dataloaders()
+    train, val = generate_dataloaders(params["dataset-path"])
 
     model = eval(f"models.{params['model']}()")
     model.fc = nn.Linear(in_features=model.fc.in_features, out_features=2)
-    print("Weights are", calculate_weights())
+    print("Weights are", calculate_weights(params["dataset_path"]))
 
     os.makedirs(os.path.join(here, params["name"]), exist_ok=True)
 
