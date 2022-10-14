@@ -102,7 +102,7 @@ def generate_parser():
 
 if __name__ == "__main__":
     params = generate_parser()
-    train, val = generate_dataloaders(params["dataset-path"])
+    train, val = generate_dataloaders(params["dataset_path"])
 
     model = eval(f"models.{params['model']}()")
     model.fc = nn.Linear(in_features=model.fc.in_features, out_features=2)
