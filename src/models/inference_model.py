@@ -68,6 +68,7 @@ class EntryExitInference(InferenceModel):
         active_preds = torch.stack([x[1] for x in active_preds])
         active_preds = active_preds.detach().cpu().numpy()
 
+        print(f"{len(preds) = }, {len(times) = }")
         return (active_preds, times)
 
 
@@ -85,7 +86,7 @@ if __name__ == "__main__":
         transform=inference_transform,
     )
 
-    holdout_csv = format_data_csv(args["csv"], args["dataset"])
+    holdout_csv = format_data_csv(args["csv"], args["dataset"], dropna=False)
     uris = holdout_csv["origin_uri"].values
     print("Doing inference on", len(uris), "number of videos")
 
