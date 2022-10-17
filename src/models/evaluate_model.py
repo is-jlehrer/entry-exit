@@ -98,7 +98,7 @@ if __name__ == "__main__":
     parser = generate_parser()
     args = vars(parser.parse_args())
 
-    probs, times, truths, save = args["probs"], args["times"], args["metadata"], args["save"]
+    probs, times, truths, save, tag = args["probs"], args["times"], args["metadata"], args["save"], args["tag"]
 
     probs = pd.read_csv(probs, index_col='Unnamed: 0')
     times = pd.read_csv(times, index_col='Unnamed: 0')
