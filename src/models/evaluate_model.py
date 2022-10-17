@@ -1,6 +1,6 @@
 import os
 import sys
-from tkinter.ttk import _TreeviewColumnDict
+from tkinter import E
 import matplotlib.pyplot as plt
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -17,92 +17,88 @@ import torchvision.models as models
 from lightml.models.predict_model import InferenceModel
 from utils import format_data_csv, get_transforms
 import pandas as pd
+from sklearn.metrics import roc_curve, confusion_matrix
 
 here = pathlib.Path(__file__).parent.resolve()
-THRESH = 0.3
+THRESH = 0.5
+
+
+def generate_confusion_matrix(probs, times, truth):
+    preds, truths = [], []
+
+    probs = probs.apply(lambda x: int(x > THRESH))
+
+    for vid in probs.index:
+        pred = probs.loc[vid, :].values
+        
+        st, et = truth.loc[vid, 'start_time'], truth.loc[vid, 'end_time']
+        gt = [1 if t >= st and t <= et else 0 for t in times.loc[vid, :].values]
+
+        preds.extend(pred)
+        truths.extend(gt)
+
+    matrix = confusion_matrix(y_true=np.array(truths), y_pred=np.array(preds))
+    return matrix 
+
+def generate_roc_curve(probs, times, truth):
+    scores, truths = [], []
+    for vid in probs.index:
+        score = probs.loc[vid, :].values
+        st, et = truth.loc[vid, 'start_time'], truth.loc[vid, 'end_time']
+        gt = [1 if t >= st and t <= et else 0 for t in times.loc[vid, :].values]
+
+        scores.extend(score)
+        truths.extend(gt)
+    
+    curve = roc_curve(y_true=np.array(truths), y_pred=np.array(scores))
+
+    return curve
 
 def generate_parser():
     parser = argparse.ArgumentParser()
     parser.add_argument(
-        '--checkpoint',
-        help='path to model checkpoint',
-        required=True,
+        '--probs',
+        help='Path to csv containing probabilities for each frame prediction',
         type=str,
+        required=True
     )
 
     parser.add_argument(
-        '--csv',
-        help='Path to csv for inference',
-        required=True,
+        '--times',
+        help='Path to file containing times for each frame prediction',
         type=str,
+        required=True,
     )
 
     parser.add_argument(
-        '--dataset',
-        help='Path to decomped dataset',
-        required=True,
+        '--metadata',
+        help='Path to file containing metadata (train, val, test split)',
         type=str,
+        required=True,
     )
 
     parser.add_argument(
-        '--name',
-        help='File name suffix of saved probabilities + times for inference results (do not include extension)',
-        required=True,
+        '--save',
+        help='Path to save roc/confusion matrices to',
         type=str,
+        required=True,
     )
 
-    return parser 
-
-class EntryExitInference(InferenceModel):
-    @staticmethod
-    def moving_average(a, n=3):
-        ret = np.cumsum(a, dtype=float)
-        ret[n:] = ret[n:] - ret[:-n]
-        return ret[n - 1:] / n
-
-    def postprocess(self, outputs):
-        # Instead of keeping logits [class_0_logit, class_1_logit], just take class 1
-        active_preds, times = outputs
-
-        active_preds = F.softmax(active_preds, dim=-1)
-        active_preds = torch.stack([x[1] for x in active_preds])
-        active_preds = active_preds.detach().cpu().numpy()
-
-        return (active_preds, times)
+    return parser
 
 
 if __name__ == "__main__":
     parser = generate_parser()
     args = vars(parser.parse_args())
 
-    model = models.resnet18()
-    model.fc = nn.Linear(model.fc.in_features, 2)
+    probs, times, truths, save = args["probs"], args["times"], args["metadata"], args["save"]
 
-    inference_transform = get_transforms()["val"]
-    inference_wrapper = EntryExitInference(
-        base_model=model,
-        weights_path=os.path.join(here, args["checkpoint"]),
-        transform=inference_transform,
-    )
+    probs = pd.read_csv(probs, index_col='Unnamed: 0')
+    times = pd.read_csv(times, index_col='Unnamed: 0')
+    truths = format_data_csv(truths, '')  # decomp path doesnt matter, just leave blank
+    truths.index = truths["origin_uri"]
 
-    holdout_csv = format_data_csv(args["csv"], args["dataset"])
-    uris = holdout_csv["origin_uri"].values
-    print("Doing inference on", len(uris), "number of videos")
+    matrix_vals = generate_confusion_matrix(probs, times, truths)
+    roc_curve_vals = generate_roc_curve(probs, times, truths)
 
-    preds = inference_wrapper.predict_from_uris(
-        uri_list=uris,
-        local_path=os.path.join(here, "..", "data", "holdout"),
-        sample_rate=10,  # predict every 50 frames
-        batch_size=64,
-    )
 
-    probas = pd.DataFrame([x[0] for x in preds])
-    times = pd.DataFrame([x[1] for x in preds])
-
-    probas.index = uris
-    times.index = uris
-
-    tag = args["name"]
-    os.makedirs(os.path.join(here, "inference"), exist_ok=True)
-    probas.to_csv(os.path.join(here, f"inference/probs_{tag}.csv"))
-    times.to_csv(os.path.join(here, f"inference/times_{tag}.csv"))
