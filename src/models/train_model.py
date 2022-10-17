@@ -100,11 +100,11 @@ def generate_parser():
     return args
 
 
-def calculate_mean_std(loader):
+def calculate_mean_std(loader, total=100):
     mean = 0.
     std = 0.
     for i, (images, _) in enumerate(tqdm(loader)):
-        if i == 100:
+        if i == total:
             break
         batch_samples = images.size(0)  # batch size (the last batch can have smaller size!)
         images = images.view(batch_samples, images.size(1), -1)
@@ -119,54 +119,52 @@ def calculate_mean_std(loader):
 if __name__ == "__main__":
     params = generate_parser()
     train, val = generate_dataloaders(params["dataset_path"])
-    mean, std = calculate_mean_std(train)
-    print(f'{mean = }, {std = }')
 
-    # model = eval(f"models.{params['model']}()")
-    # model.fc = nn.Linear(in_features=model.fc.in_features, out_features=2)
-    # print("Weights are", calculate_weights(params["dataset_path"]))
+    model = eval(f"models.{params['model']}()")
+    model.fc = nn.Linear(in_features=model.fc.in_features, out_features=2)
+    print("Weights are", calculate_weights(params["dataset_path"]))
 
-    # os.makedirs(os.path.join(here, params["name"]), exist_ok=True)
+    os.makedirs(os.path.join(here, params["name"]), exist_ok=True)
 
-    # device = "cuda:0" if torch.cuda.is_available() else "cpu"
-    # optimizer = optim.SGD(
-    #     params=model.parameters(),
-    #     lr=float(params["lr"]),
-    #     momentum=float(params["momentum"]),
-    #     weight_decay=float(params["weight_decay"]),
-    # )
-    # train_handler = TrainModel(
-    #     base_model=model,
-    #     trainer_config={
-    #         "max_epochs": 500,
-    #         "logger": WandbLogger(project="Julian EntryExit", name=params["name"]),
-    #         "callbacks": [
-    #             ModelCheckpoint(
-    #                 dirpath=os.path.join(here, params["name"]),
-    #                 filename="model-{epoch}",
-    #                 monitor="val_loss",
-    #                 mode="min",
-    #                 save_top_k=-1,
-    #             ),
-    #             LearningRateMonitor(logging_interval="epoch"),
-    #             # EarlyStopping(monitor="val_loss", patience=5),
-    #             StochasticWeightAveraging(swa_lrs=0.01),
-    #         ],
-    #         "track_grad_norm": 2,
-    #         "accelerator": "gpu",
-    #         "devices": 1,
-    #     },
-    #     model_config={
-    #         "optimizer": optimizer,
-    #         "scheduler": optim.lr_scheduler.ReduceLROnPlateau(optimizer, factor=0.75),
-    #         "loss": nn.CrossEntropyLoss(weight=calculate_weights(params["dataset_path"]) if params["class_weights"] else None),
-    #         "metrics": {
-    #             "accuracy": Accuracy(average="macro", num_classes=2).to(device),
-    #             "precision": Precision(average="macro", num_classes=2).to(device),
-    #             "recall": Recall(average="macro", num_classes=2).to(device),
-    #             "f1": F1Score(average="macro", num_classes=2).to(device),
-    #         },
-    #     },
-    # )
+    device = "cuda:0" if torch.cuda.is_available() else "cpu"
+    optimizer = optim.SGD(
+        params=model.parameters(),
+        lr=float(params["lr"]),
+        momentum=float(params["momentum"]),
+        weight_decay=float(params["weight_decay"]),
+    )
+    train_handler = TrainModel(
+        base_model=model,
+        trainer_config={
+            "max_epochs": 500,
+            "logger": WandbLogger(project="Julian EntryExit", name=params["name"]),
+            "callbacks": [
+                ModelCheckpoint(
+                    dirpath=os.path.join(here, params["name"]),
+                    filename="model-{epoch}",
+                    monitor="val_loss",
+                    mode="min",
+                    save_top_k=-1,
+                ),
+                LearningRateMonitor(logging_interval="epoch"),
+                # EarlyStopping(monitor="val_loss", patience=5),
+                StochasticWeightAveraging(swa_lrs=0.01),
+            ],
+            "track_grad_norm": 2,
+            "accelerator": "gpu",
+            "devices": 1,
+        },
+        model_config={
+            "optimizer": optimizer,
+            "scheduler": optim.lr_scheduler.ReduceLROnPlateau(optimizer, factor=0.75),
+            "loss": nn.CrossEntropyLoss(weight=calculate_weights(params["dataset_path"]) if params["class_weights"] else None),
+            "metrics": {
+                "accuracy": Accuracy(average="macro", num_classes=2).to(device),
+                "precision": Precision(average="macro", num_classes=2).to(device),
+                "recall": Recall(average="macro", num_classes=2).to(device),
+                "f1": F1Score(average="macro", num_classes=2).to(device),
+            },
+        },
+    )
 
-    # train_handler.fit(train, val)
+    train_handler.fit(train, val)
