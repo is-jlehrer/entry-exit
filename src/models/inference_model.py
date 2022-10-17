@@ -1,6 +1,5 @@
 import os
 import sys
-import matplotlib.pyplot as plt
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
@@ -11,15 +10,12 @@ import numpy as np
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-import torchmetrics
 import torchvision.models as models
 from lightml.models.predict_model import InferenceModel
 from utils import format_data_csv, get_transforms
 import pandas as pd
 
 here = pathlib.Path(__file__).parent.resolve()
-THRESH = 0.3
-
 def generate_parser():
     parser = argparse.ArgumentParser()
     parser.add_argument(
