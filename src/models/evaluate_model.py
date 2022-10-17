@@ -26,7 +26,7 @@ THRESH = 0.5
 def generate_confusion_matrix(probs, times, truth):
     preds, truths = [], []
 
-    probs = probs.apply(lambda x: int(x > THRESH))
+    probs = probs.applymap(lambda x: int(x > THRESH))
 
     for vid in probs.index:
         pred = probs.loc[vid, :].values

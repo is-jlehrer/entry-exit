@@ -63,7 +63,7 @@ class EntryExitInference(InferenceModel):
         active_preds = torch.stack([x[1] for x in active_preds])
         active_preds = active_preds.detach().cpu().numpy()
 
-        print(f"{len(preds) = }, {len(times) = }")
+        print(f"{len(active_preds) = }, {len(times) = }")
         return (active_preds, times)
 
 
