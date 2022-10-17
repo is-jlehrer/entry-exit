@@ -1,6 +1,5 @@
 import os
 import sys
-from tkinter import E
 import matplotlib.pyplot as plt
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -15,6 +14,7 @@ import torch.nn.functional as F
 import torchmetrics
 import torchvision.models as models
 from lightml.models.predict_model import InferenceModel
+import seaborn as sns
 from utils import format_data_csv, get_transforms
 import pandas as pd
 from sklearn.metrics import roc_curve, confusion_matrix
@@ -84,6 +84,13 @@ def generate_parser():
         required=True,
     )
 
+    parser.add_argument(
+        '--tag',
+        help='Suffix of saved files',
+        type=str,
+        required=True,
+    )
+
     return parser
 
 
@@ -99,6 +106,19 @@ if __name__ == "__main__":
     truths.index = truths["origin_uri"]
 
     matrix_vals = generate_confusion_matrix(probs, times, truths)
-    roc_curve_vals = generate_roc_curve(probs, times, truths)
+    fpr, tpr, threshs = generate_roc_curve(probs, times, truths)
 
+    df_cm = pd.DataFrame(matrix_vals, index=["outside", "inside"], columns=["outside", "inside"])
+    plt.figure(figsize=(10, 7))
+    sns.heatmap(df_cm, annot=True)
+    plt.savefig(f"confusion_matrix_{tag}.png")
+
+    df_roc = pd.DataFrame({
+        "True Positive Rate": fpr,
+        "False Positive Rate": tpr,
+    })
+    plt.clf()
+    plt.figure(figsize=(10, 7))
+    sns.lineplot(df_roc, annot=True)
+    plt.savefig(f"roc_curve_{tag}.png")
 
