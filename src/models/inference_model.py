@@ -26,15 +26,8 @@ def generate_parser():
     )
 
     parser.add_argument(
-        '--csv',
+        '--metadata',
         help='Path to csv for inference',
-        required=True,
-        type=str,
-    )
-
-    parser.add_argument(
-        '--dataset',
-        help='Path to decomped dataset',
         required=True,
         type=str,
     )
@@ -89,7 +82,7 @@ if __name__ == "__main__":
         transform=inference_transform,
     )
 
-    holdout_csv = format_data_csv(args["csv"], args["dataset"], dropna=False)
+    holdout_csv = format_data_csv(args["metadata"], "", dropna=False)  # dont need path to decomped dataset, just leave blank
     uris = holdout_csv["origin_uri"].values if args["limit"] is None else holdout_csv["origin_uri"].values[0: args["limit"]]
     print("Doing inference on", len(uris), "number of videos")
 
