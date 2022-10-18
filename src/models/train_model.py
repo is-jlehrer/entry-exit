@@ -120,17 +120,24 @@ if __name__ == "__main__":
     params = generate_parser()
     train, val = generate_dataloaders(params["dataset_path"])
 
-    model = eval(f"models.{params['model']}()")
-    model.fc = nn.Linear(in_features=model.fc.in_features, out_features=2)
-    print("Weights are", calculate_weights(params["dataset_path"]))
+    # model = eval(f"models.{params['model']}()")
+    # model.fc = nn.Linear(in_features=model.fc.in_features, out_features=2)
+
+    model = models.vit_b_32()
+    model.heads.head.out_features = 2
+
+    # for name, layer in model.named_modules():
+    #     if isinstance(layer, nn.Dropout):
+    #         layer.p = 0.5
+    # print("Weights are", calculate_weights(params["dataset_path"]))
 
     os.makedirs(os.path.join(here, params["name"]), exist_ok=True)
 
     device = "cuda:0" if torch.cuda.is_available() else "cpu"
-    optimizer = optim.SGD(
+    optimizer = optim.Adam(
         params=model.parameters(),
         lr=float(params["lr"]),
-        momentum=float(params["momentum"]),
+        # momentum=float(params["momentum"]),
         weight_decay=float(params["weight_decay"]),
     )
     train_handler = TrainModel(
