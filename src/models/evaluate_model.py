@@ -117,14 +117,16 @@ if __name__ == "__main__":
     fpr, tpr, threshs = generate_roc_curve(probs, times, truths)
 
     df_cm = pd.DataFrame(matrix_vals, index=["outside", "inside"], columns=["outside", "inside"])
+    print(df_cm)
+    
     plt.figure(figsize=(10, 7))
     sns.heatmap(df_cm, annot=True)
     plt.savefig(f"confusion_matrix_{tag}.png")
 
-    df_roc = pd.DataFrame([{
+    df_roc = pd.DataFrame({
         "True Positive Rate": fpr,
         "False Positive Rate": tpr,
-    }])
+    })
     print(df_roc)
     plt.clf()
     plt.figure(figsize=(10, 7))
