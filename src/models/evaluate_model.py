@@ -130,6 +130,6 @@ if __name__ == "__main__":
     print(df_roc)
     plt.clf()
     plt.figure(figsize=(10, 7))
-    sns.lineplot(df_roc, annot=True)
+    sns.lineplot(x=fpr, y=tpr, annot=True)
     plt.savefig(f"roc_curve_{tag}.png")
 
