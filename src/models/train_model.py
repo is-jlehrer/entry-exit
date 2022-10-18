@@ -125,6 +125,7 @@ if __name__ == "__main__":
 
     model = models.vit_b_32()
     model.heads.head.out_features = 2
+    print(model)
 
     for name, layer in model.named_modules():
         if isinstance(layer, nn.Dropout):
