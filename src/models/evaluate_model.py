@@ -56,7 +56,7 @@ def generate_roc_curve(probs, times, truth):
         scores.extend(score)
         truths.extend(gt)
     
-    curve = roc_curve(y_true=np.array(truths), y_pred=np.array(scores))
+    curve = roc_curve(y_true=np.array(truths), y_score=np.array(scores))
 
     return curve
 
