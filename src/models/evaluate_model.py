@@ -26,10 +26,10 @@ THRESH = 0.5
 def generate_confusion_matrix(probs, times, truth):
     preds, truths = [], []
 
-    probs = probs.applymap(lambda x: int(x > THRESH))
-
     for vid in probs.index:
-        pred = probs.loc[vid, :].values
+        pred = probs.loc[vid, :]
+        pred = pred.apply(lambda x: int(x > THRESH)).values
+        pred = pred[~pred.isna()]
         
         st, et = truth.loc[vid, 'start_time'], truth.loc[vid, 'end_time']
         gt = [1 if t >= st and t <= et else 0 for t in times.loc[vid, :].values]
