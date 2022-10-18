@@ -46,6 +46,14 @@ def generate_parser():
         type=str,
     )
 
+    parser.add_argument(
+        '--limit',
+        help='Number of videos to perform inference on',
+        required=False,
+        default=None,
+        type=int,
+    )
+
     return parser 
 
 class EntryExitInference(InferenceModel):
@@ -82,7 +90,7 @@ if __name__ == "__main__":
     )
 
     holdout_csv = format_data_csv(args["csv"], args["dataset"], dropna=False)
-    uris = holdout_csv["origin_uri"].values
+    uris = holdout_csv["origin_uri"].values if args["limit"] is None else holdout_csv["origin_uri"].values[0: args["limit"]]
     print("Doing inference on", len(uris), "number of videos")
 
     preds = inference_wrapper.predict_from_uris(
