@@ -46,7 +46,9 @@ def generate_confusion_matrix(probs, times, truth):
 def generate_roc_curve(probs, times, truth):
     scores, truths = [], []
     for vid in probs.index:
-        score = probs.loc[vid, :].values
+        score = probs.loc[vid, :]
+        pred = pred[~np.isnan(pred)].values
+        
         st, et = truth.loc[vid, 'start_time'], truth.loc[vid, 'end_time']
         gt = [1 if t >= st and t <= et else 0 for t in times.loc[vid, :].values]
         if len(gt) > len(score):
