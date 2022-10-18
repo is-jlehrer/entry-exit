@@ -124,7 +124,7 @@ if __name__ == "__main__":
     # model.fc = nn.Linear(in_features=model.fc.in_features, out_features=2)
 
     model = models.vit_b_32()
-    model.heads.head.out_features = 2
+    model.heads.head = nn.Linear(model.heads.head.in_features, 2)
     print(model)
 
     for name, layer in model.named_modules():
