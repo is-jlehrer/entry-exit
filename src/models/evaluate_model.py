@@ -121,10 +121,11 @@ if __name__ == "__main__":
     sns.heatmap(df_cm, annot=True)
     plt.savefig(f"confusion_matrix_{tag}.png")
 
-    df_roc = pd.DataFrame({
+    df_roc = pd.DataFrame([{
         "True Positive Rate": fpr,
         "False Positive Rate": tpr,
-    })
+    }])
+    print(df_roc)
     plt.clf()
     plt.figure(figsize=(10, 7))
     sns.lineplot(df_roc, annot=True)
