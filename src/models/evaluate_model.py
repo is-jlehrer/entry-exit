@@ -40,7 +40,7 @@ def generate_confusion_matrix(probs, times, truth):
         preds.extend(pred)
         truths.extend(gt)
 
-    matrix = confusion_matrix(y_true=np.array(truths), y_pred=np.array(preds))
+    matrix = confusion_matrix(y_true=np.array(truths), y_pred=np.array(preds), normalize='all')
     return matrix 
 
 def generate_roc_curve(probs, times, truth):
@@ -89,7 +89,8 @@ def generate_parser():
         '--save',
         help='Path to save roc/confusion matrices to',
         type=str,
-        required=True,
+        required=False,
+        default="."
     )
 
     parser.add_argument(
@@ -117,19 +118,22 @@ if __name__ == "__main__":
     fpr, tpr, threshs = generate_roc_curve(probs, times, truths)
 
     df_cm = pd.DataFrame(matrix_vals, index=["outside", "inside"], columns=["outside", "inside"])
-    print(df_cm)
     
     plt.figure(figsize=(10, 7))
     sns.heatmap(df_cm, annot=True)
+    plt.xlabel("Actual")
+    plt.ylabel("Predicted")
+    plt.title("Population Normalized Confusion Matrix: Model V1")
     plt.savefig(f"confusion_matrix_{tag}.png")
 
     df_roc = pd.DataFrame({
         "True Positive Rate": fpr,
         "False Positive Rate": tpr,
     })
-    print(df_roc)
     plt.clf()
     plt.figure(figsize=(10, 7))
     sns.lineplot(x=fpr, y=tpr)
+    plt.xlabel('False Positive Rate')
+    plt.ylabel('True Positive Rate')
+    plt.title('ROC Curve: Model V1')
     plt.savefig(f"roc_curve_{tag}.png")
-
