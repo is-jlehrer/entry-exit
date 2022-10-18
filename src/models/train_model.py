@@ -126,9 +126,9 @@ if __name__ == "__main__":
     model = models.vit_b_32()
     model.heads.head.out_features = 2
 
-    # for name, layer in model.named_modules():
-    #     if isinstance(layer, nn.Dropout):
-    #         layer.p = 0.5
+    for name, layer in model.named_modules():
+        if isinstance(layer, nn.Dropout):
+            layer.p = 0.3
     # print("Weights are", calculate_weights(params["dataset_path"]))
 
     os.makedirs(os.path.join(here, params["name"]), exist_ok=True)
