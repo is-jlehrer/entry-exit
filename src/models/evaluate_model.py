@@ -1,5 +1,6 @@
 import os
 import sys
+from xmlrpc.client import FastMarshaller
 import matplotlib.pyplot as plt
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -64,8 +65,8 @@ def generate_roc_curve(probs, times, truth):
     return curve
 
 def generate_validation_statistics(probs, times, truth):
-    acc = Accuracy()
-    f1 = F1Score(num_classes=1, average="macro")
+    acc = Accuracy(multiclass=False)
+    f1 = F1Score(multiclass=False)
 
     scores, truths = [], []
     for vid in probs.index:
@@ -87,7 +88,7 @@ def generate_validation_statistics(probs, times, truth):
 
     scores = np.array(scores)
     truths = np.array(truths)
-    print('ACC IS', np.mean(truths == (scores > 0.5)))
+    print('ACC IS', np.mean(truths == (scores > 0)))
 
     scores = torch.from_numpy(np.array(scores))
     truths = torch.from_numpy(np.array(truths))
