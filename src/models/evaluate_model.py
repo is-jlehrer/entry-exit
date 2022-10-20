@@ -65,7 +65,7 @@ def generate_roc_curve(probs, times, truth):
 
 def generate_validation_statistics(probs, times, truth):
     acc = Accuracy()
-    f1 = F1Score(num_classes=2, average="macro")
+    f1 = F1Score(num_classes=1, average="macro")
 
     scores, truths = [], []
     for vid in probs.index:
