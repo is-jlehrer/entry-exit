@@ -80,9 +80,9 @@ def generate_validation_statistics(probs, times, truth):
 
         st, et = truth.loc[vid, 'start_time'], truth.loc[vid, 'end_time']
         gt = [1 if t >= st and t <= et else 0 for t in time]
-        print('SCORE IS', score)
+        print('SCORE IS', np.array(score))
         score = [1 if x > 0.5 else 0 for x in score]
-        print('SCORE IS ', score)
+        print('SCORE IS ', np.array(score))
 
         if len(gt) != len(score):
             print('WARNING: Missing some probabilities. Continuing')
