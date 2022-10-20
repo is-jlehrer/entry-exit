@@ -70,7 +70,7 @@ def generate_validation_statistics(probs, times, truth):
     f1 = F1Score(multiclass=False, num_classes=1)
 
     scores, truths = [], []
-    for vid in truth.index:
+    for vid in probs.index:
         score = probs.loc[vid, :]
         score = score[~np.isnan(score)].values
 
@@ -146,7 +146,7 @@ if __name__ == "__main__":
 
     probs = pd.read_csv(probs, index_col='Unnamed: 0')
     times = pd.read_csv(times, index_col='Unnamed: 0')
-    truths = format_data_csv(truths, '', dropna=True).iloc[0:50, :]  # decomp path doesnt matter, just leave blank
+    truths = format_data_csv(truths, '', dropna=True)  # decomp path doesnt matter, just leave blank
     truths.index = truths["origin_uri"]
 
     # matrix_vals = generate_confusion_matrix(probs, times, truths)
