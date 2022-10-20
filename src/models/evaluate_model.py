@@ -169,7 +169,7 @@ if __name__ == "__main__":
     # matrix_vals = generate_confusion_matrix(probs, times, truths)
     # fpr, tpr, threshs = generate_roc_curve(probs, times, truths)
     results = generate_validation_statistics(probs, times, truths)
-    print(list(set(probs.index).intersection(times.index, probs.index)))
+    print(len(list(set(probs.index).intersection(times.index, probs.index))))
     print(f"Results are {results}")
 
     # df_cm = pd.DataFrame(matrix_vals, index=["outside", "inside"], columns=["outside", "inside"])
