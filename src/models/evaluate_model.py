@@ -79,7 +79,7 @@ def generate_validation_statistics(probs, times, truth):
         gt = [1 if t >= st and t <= et else 0 for t in time]
         if len(gt) > len(score):
             print('WARNING: Missing some probabilities. Continuing')
-            print(f'Len(scores)={len(score)} & Len(times)={len(time)}')
+            print(f'len(scores)={len(score)} & len(times)={len(time)}')
             gt = gt[0: len(score)]
 
         scores.extend(score)
@@ -148,28 +148,28 @@ if __name__ == "__main__":
     truths = format_data_csv(truths, '', dropna=False)  # decomp path doesnt matter, just leave blank
     truths.index = truths["origin_uri"]
 
-    matrix_vals = generate_confusion_matrix(probs, times, truths)
-    fpr, tpr, threshs = generate_roc_curve(probs, times, truths)
+    # matrix_vals = generate_confusion_matrix(probs, times, truths)
+    # fpr, tpr, threshs = generate_roc_curve(probs, times, truths)
     results = generate_validation_statistics(probs, times, truths)
     print(f"Results are {results}")
 
-    df_cm = pd.DataFrame(matrix_vals, index=["outside", "inside"], columns=["outside", "inside"])
+    # df_cm = pd.DataFrame(matrix_vals, index=["outside", "inside"], columns=["outside", "inside"])
     
-    plt.figure(figsize=(10, 7))
-    sns.heatmap(df_cm, annot=True)
-    plt.xlabel("Actual")
-    plt.ylabel("Predicted")
-    plt.title("Population Normalized Confusion Matrix: Model V1")
-    plt.savefig(f"confusion_matrix_{tag}.png")
+    # plt.figure(figsize=(10, 7))
+    # sns.heatmap(df_cm, annot=True)
+    # plt.xlabel("Actual")
+    # plt.ylabel("Predicted")
+    # plt.title("Population Normalized Confusion Matrix: Model V1")
+    # plt.savefig(f"confusion_matrix_{tag}.png")
 
-    df_roc = pd.DataFrame({
-        "True Positive Rate": fpr,
-        "False Positive Rate": tpr,
-    })
-    plt.clf()
-    plt.figure(figsize=(10, 7))
-    sns.lineplot(x=fpr, y=tpr)
-    plt.xlabel('False Positive Rate')
-    plt.ylabel('True Positive Rate')
-    plt.title('ROC Curve: Model V1')
-    plt.savefig(f"roc_curve_{tag}.png")
+    # df_roc = pd.DataFrame({
+    #     "True Positive Rate": fpr,
+    #     "False Positive Rate": tpr,
+    # })
+    # plt.clf()
+    # plt.figure(figsize=(10, 7))
+    # sns.lineplot(x=fpr, y=tpr)
+    # plt.xlabel('False Positive Rate')
+    # plt.ylabel('True Positive Rate')
+    # plt.title('ROC Curve: Model V1')
+    # plt.savefig(f"roc_curve_{tag}.png")
