@@ -78,6 +78,7 @@ def generate_validation_statistics(probs, times, truth):
 
         st, et = truth.loc[vid, 'start_time'], truth.loc[vid, 'end_time']
         gt = [1 if t >= st and t <= et else 0 for t in time]
+        score = [1 if x > 0.5 else 0 for x in score]
         print(score)
         print(gt)
 
@@ -91,7 +92,7 @@ def generate_validation_statistics(probs, times, truth):
 
     scores = np.array(scores)
     truths = np.array(truths)
-    print('ACC IS', np.mean(truths == (scores > 0)))
+    print('ACC IS', np.mean(truths == (scores > 0.5)))
 
     scores = torch.from_numpy(np.array(scores))
     truths = torch.from_numpy(np.array(truths))
