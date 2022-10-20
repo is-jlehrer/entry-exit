@@ -79,10 +79,13 @@ def generate_validation_statistics(probs, times, truth):
         time = time[~np.isnan(time)].values
 
         st, et = truth.loc[vid, 'start_time'], truth.loc[vid, 'end_time']
+        print('TIME IS', time)
+        print('ST, ET IS', st, et)
         gt = [1 if t >= st and t <= et else 0 for t in time]
-        print('SCORE IS', np.array(score))
+        
+        # print('SCORE IS', np.array(score))
         score = [1 if x > 0.5 else 0 for x in score]
-        print('SCORE IS ', np.array(score))
+        # print('SCORE IS ', np.array(score))
 
         if len(gt) != len(score):
             print('WARNING: Missing some probabilities. Continuing')
@@ -91,8 +94,8 @@ def generate_validation_statistics(probs, times, truth):
 
         scores.extend(score)
         truths.extend(gt)
-        print('Lengths are', len(gt), len(score))
-        print(np.array(score), np.array(gt))
+        # print('Lengths are', len(gt), len(score))
+        # print(np.array(score), np.array(gt))
 
     scores = np.array(scores)
     truths = np.array(truths)
