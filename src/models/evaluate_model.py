@@ -75,7 +75,6 @@ def generate_validation_statistics(probs, times, truth):
         time = times.loc[vid, :]
         time = time[~np.isnan(time)].values
 
-
         st, et = truth.loc[vid, 'start_time'], truth.loc[vid, 'end_time']
         gt = [1 if t >= st and t <= et else 0 for t in time]
         if len(gt) > len(score):
