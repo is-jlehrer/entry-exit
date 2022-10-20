@@ -67,8 +67,8 @@ def generate_roc_curve(probs, times, truth):
     return curve
 
 def generate_validation_statistics(probs, times, truth):
-    acc = Accuracy(multiclass=False)
-    f1 = F1Score(multiclass=False)
+    acc = Accuracy(multiclass=False, num_classes=1)
+    f1 = F1Score(multiclass=False, num_classes=1)
 
     scores, truths = [], []
     for vid in truth.index:
@@ -92,7 +92,6 @@ def generate_validation_statistics(probs, times, truth):
 
     print(np.array(score), np.array(gt))
     print('SKLEARN ACC IS', accuracy_score(truths, scores))
-    print('torchmetrics.functional.classification.binary_accuracy is', binary_accuracy(torch.tensor(scores), torch.tensor(truths)))
     return {
         "accuracy": acc(torch.tensor(scores), torch.tensor(truths)),
         "f1": f1(torch.tensor(scores), torch.tensor(truths))
