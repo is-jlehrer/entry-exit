@@ -81,7 +81,7 @@ def generate_validation_statistics(probs, times, truth):
         st, et = truth.loc[vid, 'start_time'], truth.loc[vid, 'end_time']
         print('TIME IS', time)
         print('ST, ET IS', st, et)
-        gt = [1 if t >= st and t <= et else 0 for t in time]
+        gt = [1 if t > st and t < et else 0 for t in time]
         print('GT IS', np.array(gt))
         
         # print('SCORE IS', np.array(score))
