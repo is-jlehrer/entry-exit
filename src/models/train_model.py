@@ -120,10 +120,10 @@ if __name__ == "__main__":
     params = generate_parser()
     train, val = generate_dataloaders(params["dataset_path"])
 
-    # model = eval(f"models.{params['model']}()")
-    # model.fc = nn.Linear(in_features=model.fc.in_features, out_features=2)
+    model = eval(f"models.{params['model']}()")
+    model.fc = nn.Linear(in_features=model.fc.in_features, out_features=2)
 
-    model = models.vit_b_32(dropout=0.3, num_classes=2)
+    # model = models.vit_b_32(dropout=0.3, num_classes=2)
     # print("Weights are", calculate_weights(params["dataset_path"]))
 
     os.makedirs(os.path.join(here, params["name"]), exist_ok=True)
