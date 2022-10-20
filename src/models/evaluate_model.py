@@ -70,6 +70,7 @@ def generate_validation_statistics(probs, times, truth):
     f1 = F1Score(multiclass=False)
 
     scores, truths = [], []
+    accs = []
     for vid in probs.index:
         score = probs.loc[vid, :]
         score = score[~np.isnan(score)].values
@@ -90,10 +91,12 @@ def generate_validation_statistics(probs, times, truth):
 
         scores.extend(score)
         truths.extend(gt)
+        accs.append(scores == truth)
 
     scores = np.array(scores)
     truths = np.array(truths)
     print('ACC IS', np.mean(truths == scores))
+    print('ACC IS', np.mean(accs))
 
     scores = torch.from_numpy(np.array(scores))
     truths = torch.from_numpy(np.array(truths))
