@@ -70,7 +70,6 @@ def generate_validation_statistics(probs, times, truth):
     f1 = F1Score(multiclass=False)
 
     scores, truths = [], []
-    accs = []
     for vid in truth.index:
         score = probs.loc[vid, :]
         score = score[~np.isnan(score)].values
@@ -92,8 +91,8 @@ def generate_validation_statistics(probs, times, truth):
 
     print('SKLEARN ACC IS', accuracy_score(truths, scores))
     return {
-        "accuracy": acc(scores, truths),
-        "f1": f1(scores, truths)
+        "accuracy": acc(torch.tensor(scores), torch.tensor(truths)),
+        "f1": f1(torch.tensor(scores), torch.tensor(truths))
     }
 
 def generate_parser():
