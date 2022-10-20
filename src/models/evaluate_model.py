@@ -79,14 +79,8 @@ def generate_validation_statistics(probs, times, truth):
         time = time[~np.isnan(time)].values
 
         st, et = truth.loc[vid, 'start_time'], truth.loc[vid, 'end_time']
-        print('TIME IS', time)
-        print('ST, ET IS', st, et)
         gt = [1 if t > st and t < et else 0 for t in time]
-        print('GT IS', np.array(gt))
-        
-        # print('SCORE IS', np.array(score))
         score = [1 if x > 0.5 else 0 for x in score]
-        # print('SCORE IS ', np.array(score))
 
         if len(gt) != len(score):
             print('WARNING: Missing some probabilities. Continuing')
@@ -95,19 +89,7 @@ def generate_validation_statistics(probs, times, truth):
 
         scores.extend(score)
         truths.extend(gt)
-        # print('Lengths are', len(gt), len(score))
-        # print(np.array(score), np.array(gt))
 
-    scores = np.array(scores)
-    truths = np.array(truths)
-    print('ACC IS', np.mean(truths == scores))
-    print('ACC IS', np.mean(accs))
-
-    scores = torch.from_numpy(np.array(scores))
-    truths = torch.from_numpy(np.array(truths))
-
-    print(scores, truths)
-    print(f'DTYPES ARE {scores.dtype}, {truths.dtype}')
     print('SKLEARN ACC IS', accuracy_score(truths, scores))
     return {
         "accuracy": acc(scores, truths),
@@ -169,9 +151,7 @@ if __name__ == "__main__":
     # matrix_vals = generate_confusion_matrix(probs, times, truths)
     # fpr, tpr, threshs = generate_roc_curve(probs, times, truths)
     results = generate_validation_statistics(probs, times, truths)
-    print(len(list(set(probs.index).intersection(times.index, probs.index))))
-    # print(f"Results are {results}")
-
+    print(results)
     # df_cm = pd.DataFrame(matrix_vals, index=["outside", "inside"], columns=["outside", "inside"])
     
     # plt.figure(figsize=(10, 7))
