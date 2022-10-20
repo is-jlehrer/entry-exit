@@ -82,8 +82,8 @@ def generate_validation_statistics(probs, times, truth):
         truths.extend(gt)
 
     return {
-        "accuracy": acc(truths, scores),
-        "f1": f1(truths, scores)
+        "accuracy": acc(np.array(truths), np.array(scores)),
+        "f1": f1(np.array(truths), np.array(scores))
     }
 
 def generate_parser():
