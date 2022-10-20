@@ -74,11 +74,11 @@ if __name__ == "__main__":
 
     model = models.resnet18()
     model.fc = nn.Linear(model.fc.in_features, 2)
-
+    model.load_state_dict(torch.load(args["checkpoint"]))
+    
     inference_transform = get_transforms()["val"]
     inference_wrapper = EntryExitInference(
         base_model=model,
-        weights_path=os.path.join(here, args["checkpoint"]),
         transform=inference_transform,
     )
 
