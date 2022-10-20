@@ -89,6 +89,7 @@ def generate_validation_statistics(probs, times, truth):
         scores.extend(score)
         truths.extend(gt)
 
+    print(np.array(score), np.array(gt))
     print('SKLEARN ACC IS', accuracy_score(truths, scores))
     return {
         "accuracy": acc(torch.tensor(scores), torch.tensor(truths)),
