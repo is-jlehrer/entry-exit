@@ -90,8 +90,7 @@ def generate_validation_statistics(probs, times, truth):
         scores.extend(score)
         truths.extend(gt)
         print('Lengths are', len(gt), len(score))
-        print(score == gt)
-        accs.append(score == gt)
+        accs.append(np.array(score) == np.array(gt))
 
     scores = np.array(scores)
     truths = np.array(truths)
