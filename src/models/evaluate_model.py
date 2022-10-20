@@ -81,9 +81,12 @@ def generate_validation_statistics(probs, times, truth):
         scores.extend(score)
         truths.extend(gt)
 
+    scores = torch.from_numpy(np.array(scores))
+    truths = torch.from_numpy(np.array(truths))
+
     return {
-        "accuracy": acc(np.array(truths), np.array(scores)),
-        "f1": f1(np.array(truths), np.array(scores))
+        "accuracy": acc(truths, scores),
+        "f1": f1(truths, scores)
     }
 
 def generate_parser():
