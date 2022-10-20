@@ -21,7 +21,6 @@ import pandas as pd
 from sklearn.metrics import roc_curve, confusion_matrix
 from torchmetrics import Accuracy, F1Score
 from sklearn.metrics import accuracy_score
-from torchmetrics.functional.classification import binary_accuracy
 
 here = pathlib.Path(__file__).parent.resolve()
 THRESH = 0.5
