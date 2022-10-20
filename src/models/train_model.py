@@ -19,6 +19,8 @@ from pytorch_lightning.callbacks import (EarlyStopping, LearningRateMonitor,
 from pytorch_lightning.loggers import WandbLogger
 from torch.utils.data import DataLoader
 from torchmetrics import Accuracy, F1Score, Precision, Recall
+import pytorch_lightning as pl
+import os 
 
 here = pathlib.Path(__file__).parent.resolve()
 from utils import get_transforms
@@ -115,6 +117,18 @@ def calculate_mean_std(loader, total=100):
     std /= len(loader.dataset)
     return mean, std
 
+class TorchModelCallback(pl.Callback):
+    def __init__(self, path) -> None:
+        super().__init__()
+        os.makedirs(path, exist_ok=True)
+        self.path = path 
+
+    def on_train_epoch_end(self, trainer, pl_module):
+        epoch = trainer.current_epoch
+        model = pl_module.model
+
+        torch.save(model.state_dict(), os.path.join(self.path, f'model-checkpoint-epoch-{epoch}'))
+
 
 if __name__ == "__main__":
     params = generate_parser()
@@ -123,8 +137,7 @@ if __name__ == "__main__":
     model = eval(f"models.{params['model']}()")
     model.fc = nn.Linear(in_features=model.fc.in_features, out_features=2)
 
-    # model = models.vit_b_32(dropout=0.3, num_classes=2)
-    # print("Weights are", calculate_weights(params["dataset_path"]))
+    savingcallback = TorchModelCallback(path=os.path.join(here, f"torch_model_checkpoints_{params['name']}"))
 
     os.makedirs(os.path.join(here, params["name"]), exist_ok=True)
 
@@ -151,6 +164,7 @@ if __name__ == "__main__":
                 LearningRateMonitor(logging_interval="epoch"),
                 # EarlyStopping(monitor="val_loss", patience=5),
                 StochasticWeightAveraging(swa_lrs=0.01),
+                savingcallback,
             ],
             "track_grad_norm": 2,
             "accelerator": "gpu",

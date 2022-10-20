@@ -150,7 +150,6 @@ if __name__ == "__main__":
     times = pd.read_csv(times, index_col='Unnamed: 0')
     truths = format_data_csv(truths, '', dropna=True)  # decomp path doesnt matter, just leave blank
     truths.index = truths["origin_uri"]
-    print(set(probs.index).intersection(truths.index, times.index))
 
     # matrix_vals = generate_confusion_matrix(probs, times, truths)
     # fpr, tpr, threshs = generate_roc_curve(probs, times, truths)
