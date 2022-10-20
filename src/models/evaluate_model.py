@@ -170,7 +170,7 @@ if __name__ == "__main__":
     # fpr, tpr, threshs = generate_roc_curve(probs, times, truths)
     results = generate_validation_statistics(probs, times, truths)
     print(len(list(set(probs.index).intersection(times.index, probs.index))))
-    print(f"Results are {results}")
+    # print(f"Results are {results}")
 
     # df_cm = pd.DataFrame(matrix_vals, index=["outside", "inside"], columns=["outside", "inside"])
     
