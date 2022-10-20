@@ -20,6 +20,7 @@ from utils import format_data_csv, get_transforms
 import pandas as pd
 from sklearn.metrics import roc_curve, confusion_matrix
 from torchmetrics import Accuracy, F1Score
+from sklearn.metrics import accuracy_score
 
 here = pathlib.Path(__file__).parent.resolve()
 THRESH = 0.5
@@ -92,13 +93,14 @@ def generate_validation_statistics(probs, times, truth):
 
     scores = np.array(scores)
     truths = np.array(truths)
-    print('ACC IS', np.mean(truths == (scores > 0.5)))
+    print('ACC IS', np.mean(truths == scores))
 
     scores = torch.from_numpy(np.array(scores))
     truths = torch.from_numpy(np.array(truths))
 
     print(scores, truths)
     print(f'DTYPES ARE {scores.dtype}, {truths.dtype}')
+    print('SKLEARN ACC IS', accuracy_score(truths, preds))
     return {
         "accuracy": acc(scores, truths),
         "f1": f1(scores, truths)
