@@ -71,7 +71,7 @@ def generate_validation_statistics(probs, times, truth):
 
     scores, truths = [], []
     accs = []
-    for vid in truth.index:
+    for vid in probs.index:
         score = probs.loc[vid, :]
         score = score[~np.isnan(score)].values
 
