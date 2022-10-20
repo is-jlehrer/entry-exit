@@ -100,7 +100,7 @@ def generate_validation_statistics(probs, times, truth):
 
     print(scores, truths)
     print(f'DTYPES ARE {scores.dtype}, {truths.dtype}')
-    print('SKLEARN ACC IS', accuracy_score(truths, preds))
+    print('SKLEARN ACC IS', accuracy_score(truths, scores))
     return {
         "accuracy": acc(scores, truths),
         "f1": f1(scores, truths)
