@@ -72,13 +72,15 @@ def generate_validation_statistics(probs, times, truth):
         score = probs.loc[vid, :]
         score = score[~np.isnan(score)].values
 
-        time = times.loc[vid, :].values
-        time = time[~np.isnan(time)]
+        time = times.loc[vid, :]
+        time = time[~np.isnan(time)].values
+
 
         st, et = truth.loc[vid, 'start_time'], truth.loc[vid, 'end_time']
         gt = [1 if t >= st and t <= et else 0 for t in time]
         if len(gt) > len(score):
             print('WARNING: Missing some probabilities. Continuing')
+            print(f'Len(scores)={len(score)} & Len(times)={len(time)}')
             gt = gt[0: len(score)]
 
         scores.extend(score)
