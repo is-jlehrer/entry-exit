@@ -169,6 +169,8 @@ if __name__ == "__main__":
             "track_grad_norm": 2,
             "accelerator": "gpu",
             "devices": 1,
+            "limit_train_batches":1
+            "limit_val_batches":1
         },
         model_config={
             "optimizer": optimizer,
