@@ -93,7 +93,8 @@ def generate_validation_statistics(probs, times, truth):
     print('SKLEARN ACC IS', accuracy_score(truths, scores))
     return {
         "accuracy": acc(torch.tensor(scores), torch.tensor(truths)),
-        "f1": f1(torch.tensor(scores), torch.tensor(truths))
+        "f1": f1(torch.tensor(scores), torch.tensor(truths)),
+        "accdefault": Accuracy()(torch.tensor(scores), torch.tensor(truths))
     }
 
 def generate_parser():
