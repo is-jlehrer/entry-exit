@@ -84,6 +84,9 @@ def generate_validation_statistics(probs, times, truth):
     scores = torch.from_numpy(np.array(scores))
     truths = torch.from_numpy(np.array(truths))
 
+    print(scores, truths)
+    print(f'DTYPES ARE {scores.dtype}, {truths.dtype}')
+
     return {
         "accuracy": acc(scores, truths),
         "f1": f1(scores, truths)
