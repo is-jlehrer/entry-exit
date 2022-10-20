@@ -161,7 +161,7 @@ if __name__ == "__main__":
             "scheduler": optim.lr_scheduler.ReduceLROnPlateau(optimizer, factor=0.75),
             "loss": nn.CrossEntropyLoss(weight=calculate_weights(params["dataset_path"]) if params["class_weights"] else None),
             "metrics": {
-                "accuracy": Accuracy(average="macro", num_classes=2).to(device),
+                "micro_accuracy": Accuracy().to(device),
                 "precision": Precision(average="macro", num_classes=2).to(device),
                 "recall": Recall(average="macro", num_classes=2).to(device),
                 "f1": F1Score(average="macro", num_classes=2).to(device),
