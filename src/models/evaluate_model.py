@@ -21,6 +21,7 @@ import pandas as pd
 from sklearn.metrics import roc_curve, confusion_matrix
 from torchmetrics import Accuracy, F1Score
 from sklearn.metrics import accuracy_score
+from torchmetrics.functional.classification import binary_accuracy
 
 here = pathlib.Path(__file__).parent.resolve()
 THRESH = 0.5
@@ -91,6 +92,7 @@ def generate_validation_statistics(probs, times, truth):
 
     print(np.array(score), np.array(gt))
     print('SKLEARN ACC IS', accuracy_score(truths, scores))
+    print('torchmetrics.functional.classification.binary_accuracy is', binary_accuracy(torch.tensor(scores), torch.tensor(truths)))
     return {
         "accuracy": acc(torch.tensor(scores), torch.tensor(truths)),
         "f1": f1(torch.tensor(scores), torch.tensor(truths))
