@@ -82,6 +82,7 @@ def generate_validation_statistics(probs, times, truth):
         print('TIME IS', time)
         print('ST, ET IS', st, et)
         gt = [1 if t >= st and t <= et else 0 for t in time]
+        print('GT IS', np.array(gt))
         
         # print('SCORE IS', np.array(score))
         score = [1 if x > 0.5 else 0 for x in score]
