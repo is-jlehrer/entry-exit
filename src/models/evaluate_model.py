@@ -18,6 +18,7 @@ import seaborn as sns
 from utils import format_data_csv, get_transforms
 import pandas as pd
 from sklearn.metrics import roc_curve, confusion_matrix
+from torchmetrics import Accuracy, F1Score
 
 here = pathlib.Path(__file__).parent.resolve()
 THRESH = 0.5
@@ -61,6 +62,29 @@ def generate_roc_curve(probs, times, truth):
     curve = roc_curve(y_true=np.array(truths), y_score=np.array(scores))
 
     return curve
+
+def generate_validation_statistics(probs, times, truth):
+    acc = Accuracy()
+    f1 = F1Score(num_classes=2, average="macro")
+
+    scores, truths = [], []
+    for vid in probs.index:
+        score = probs.loc[vid, :]
+        score = score[~np.isnan(score)].values
+
+        st, et = truth.loc[vid, 'start_time'], truth.loc[vid, 'end_time']
+        gt = [1 if t >= st and t <= et else 0 for t in times.loc[vid, :].values]
+        if len(gt) > len(score):
+            print('WARNING: Missing some probabilities. Continuing')
+            gt = gt[0: len(score)]
+
+        scores.extend(score)
+        truths.extend(gt)
+
+    return {
+        "accuracy": acc(truths, scores),
+        "f1": f1(truths, scores)
+    }
 
 def generate_parser():
     parser = argparse.ArgumentParser()
@@ -111,11 +135,13 @@ if __name__ == "__main__":
 
     probs = pd.read_csv(probs, index_col='Unnamed: 0')
     times = pd.read_csv(times, index_col='Unnamed: 0')
-    truths = format_data_csv(truths, '')  # decomp path doesnt matter, just leave blank
+    truths = format_data_csv(truths, '', dropna=False)  # decomp path doesnt matter, just leave blank
     truths.index = truths["origin_uri"]
 
     matrix_vals = generate_confusion_matrix(probs, times, truths)
     fpr, tpr, threshs = generate_roc_curve(probs, times, truths)
+    results = generate_validation_statistics(probs, times, truths)
+    print(f"Results are {results}")
 
     df_cm = pd.DataFrame(matrix_vals, index=["outside", "inside"], columns=["outside", "inside"])
     
