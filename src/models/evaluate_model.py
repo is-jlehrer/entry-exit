@@ -32,9 +32,12 @@ def generate_confusion_matrix(probs, times, truth):
         pred = probs.loc[vid, :]
         pred = pred.apply(lambda x: int(x > THRESH))
         pred = pred[~np.isnan(pred)].values
-        
+
+        time = times.loc[vid, :]
+        time = time[~np.isnan(time)].values
+
         st, et = truth.loc[vid, 'start_time'], truth.loc[vid, 'end_time']
-        gt = [1 if t >= st and t <= et else 0 for t in times.loc[vid, :].values]
+        gt = [1 if t >= st and t <= et else 0 for t in time]
         if len(gt) > len(pred):
             print(f'WARNING: Missing {len(gt) - len(pred)} probabilities in confusion matrix calc. Continuing')
             gt = gt[0: len(pred)]
@@ -47,12 +50,16 @@ def generate_confusion_matrix(probs, times, truth):
 
 def generate_roc_curve(probs, times, truth):
     scores, truths = [], []
+
     for vid in truth.index:
         score = probs.loc[vid, :]
         score = score[~np.isnan(score)].values
 
+        time = times.loc[vid, :]
+        time = time[~np.isnan(time)].values
+
         st, et = truth.loc[vid, 'start_time'], truth.loc[vid, 'end_time']
-        gt = [1 if t >= st and t <= et else 0 for t in times.loc[vid, :].values]
+        gt = [1 if t >= st and t <= et else 0 for t in time]
         if len(gt) > len(score):
             print(f'WARNING: Missing {len(gt) - len(score)} probabilities in roc curve calc. Continuing')
             gt = gt[0: len(score)]
@@ -64,10 +71,7 @@ def generate_roc_curve(probs, times, truth):
 
     return curve
 
-def generate_validation_statistics(probs, times, truth):
-    acc = Accuracy(multiclass=False, num_classes=1)
-    f1 = F1Score(multiclass=False, num_classes=1)
-
+def calculate_validation_statistics(probs, times, truth):
     scores, truths = [], []
     for vid in truth.index:
         score = probs.loc[vid, :]
@@ -88,14 +92,8 @@ def generate_validation_statistics(probs, times, truth):
         scores.extend(score)
         truths.extend(gt)
 
-    print(np.array(score), np.array(gt))
     print('SKLEARN ACC IS', accuracy_score(truths, scores))
     print('SKLEARN F1 IS', f1_score(truths, scores))
-    return {
-        "accuracy": acc(torch.tensor(scores), torch.tensor(truths)),
-        "f1": f1(torch.tensor(scores), torch.tensor(truths)),
-        "accdefault": Accuracy()(torch.tensor(scores), torch.tensor(truths))
-    }
 
 def generate_parser():
     parser = argparse.ArgumentParser()
@@ -151,7 +149,7 @@ if __name__ == "__main__":
 
     matrix_vals = generate_confusion_matrix(probs, times, truths)
     fpr, tpr, threshs = generate_roc_curve(probs, times, truths)
-    results = generate_validation_statistics(probs, times, truths)
+    results = calculate_validation_statistics(probs, times, truths)
     roc_auc = auc(fpr, tpr)
     print(f'AUC IS {roc_auc}')
 
