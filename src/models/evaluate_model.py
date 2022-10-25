@@ -144,7 +144,7 @@ if __name__ == "__main__":
 
     probs = pd.read_csv(probs, index_col='Unnamed: 0')
     times = pd.read_csv(times, index_col='Unnamed: 0')
-    truths = format_data_csv(truths, '', dropna=True)  # decomp path doesnt matter, just leave blank
+    truths = format_data_csv(truths, '', dropna=False)  # decomp path doesnt matter, just leave blank
     truths.index = truths["origin_uri"]
 
     matrix_vals = generate_confusion_matrix(probs, times, truths)
