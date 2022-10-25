@@ -18,10 +18,8 @@ from lightml.models.predict_model import InferenceModel
 import seaborn as sns
 from utils import format_data_csv, get_transforms
 import pandas as pd
-from sklearn.metrics import roc_curve, confusion_matrix
+from sklearn.metrics import roc_curve, confusion_matrix, accuracy_score, f1_score, auc
 from torchmetrics import Accuracy, F1Score
-from sklearn.metrics import accuracy_score
-from sklearn.metrics import f1_score
 
 here = pathlib.Path(__file__).parent.resolve()
 THRESH = 0.5
@@ -151,27 +149,25 @@ if __name__ == "__main__":
     truths = format_data_csv(truths, '', dropna=True)  # decomp path doesnt matter, just leave blank
     truths.index = truths["origin_uri"]
 
-    # matrix_vals = generate_confusion_matrix(probs, times, truths)
-    # fpr, tpr, threshs = generate_roc_curve(probs, times, truths)
+    matrix_vals = generate_confusion_matrix(probs, times, truths)
+    fpr, tpr, threshs = generate_roc_curve(probs, times, truths)
     results = generate_validation_statistics(probs, times, truths)
-    print(results)
-    # df_cm = pd.DataFrame(matrix_vals, index=["outside", "inside"], columns=["outside", "inside"])
-    
-    # plt.figure(figsize=(10, 7))
-    # sns.heatmap(df_cm, annot=True)
-    # plt.xlabel("Actual")
-    # plt.ylabel("Predicted")
-    # plt.title("Population Normalized Confusion Matrix: Model V1")
-    # plt.savefig(f"confusion_matrix_{tag}.png")
+    roc_auc = auc(fpr, tpr)
+    print(f'AUC IS {roc_auc}')
 
-    # df_roc = pd.DataFrame({
-    #     "True Positive Rate": fpr,
-    #     "False Positive Rate": tpr,
-    # })
-    # plt.clf()
-    # plt.figure(figsize=(10, 7))
-    # sns.lineplot(x=fpr, y=tpr)
-    # plt.xlabel('False Positive Rate')
-    # plt.ylabel('True Positive Rate')
-    # plt.title('ROC Curve: Model V1')
-    # plt.savefig(f"roc_curve_{tag}.png")
+    df_cm = pd.DataFrame(matrix_vals, index=["outside", "inside"], columns=["outside", "inside"])
+    
+    plt.figure(figsize=(10, 7))
+    sns.heatmap(df_cm, annot=True)
+    plt.xlabel("Actual")
+    plt.ylabel("Predicted")
+    plt.title("Population Normalized Confusion Matrix: Model V1")
+    plt.savefig(f"confusion_matrix_{tag}.png")
+
+    plt.clf()
+    plt.figure(figsize=(10, 7))
+    sns.lineplot(x=fpr, y=tpr)
+    plt.xlabel('False Positive Rate')
+    plt.ylabel('True Positive Rate')
+    plt.title('ROC Curve: Model V1')
+    plt.savefig(f"roc_curve_{tag}.png")

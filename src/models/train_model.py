@@ -117,6 +117,7 @@ def calculate_mean_std(loader, total=100):
     std /= len(loader.dataset)
     return mean, std
 
+
 class TorchModelCallback(pl.Callback):
     def __init__(self, path) -> None:
         super().__init__()
