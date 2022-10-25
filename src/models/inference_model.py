@@ -122,30 +122,33 @@ class InferenceModel:
                     with torch.no_grad():
                         batch = torch.stack(batch).to(device)
                         out = self.model(batch)
+                    # NEW CODE HERE
+                    #########################################################
+                    # outside
+                    if time < start_time or time > end_time:
+                        maxs = F.softmax(out, dim=-1)
+                        maxs = [x[1] for x in maxs]
+                        false_positives_indices = (maxs > 0.5).nonzero().numpy().flatten()
+                        for idx in false_positives_indices:
+                            img = temp_imgs[idx]
+                            prob = maxs[idx].item()
+                            cv.imwrite(f"false_positive_{fno}_prob_{prob}_vid_{local_path}.png", img)
+                    else:
+                        # inside
+                        maxs = F.softmax(out, dim=-1)
+                        maxs = [x[1] for x in maxs]
+                        false_negative_indices = (maxs < 0.3).nonzero().numpy().flatten()
 
+                        for idx in false_negative_indices:
+                            img = temp_imgs[idx]
+                            prob = maxs[idx].item()
+                            cv.imwrite(f"false_negative_{fno}_prob_{prob}_vid_{local_path}.png", img)
+                    #########################################################
                     preds.extend(out)
                     batch = []
                     temp_imgs = []
 
-                # outside
-                if time < start_time or time > end_time:
-                    maxs = F.softmax(out, dim=-1)
-                    maxs = [x[1] for x in maxs]
-                    false_positives_indices = (maxs > 0.5).nonzero().numpy().flatten()
-                    for idx in false_positives_indices:
-                        img = temp_imgs[idx]
-                        prob = maxs[idx].item()
-                        cv.imwrite(f"false_positive_{fno}_prob_{prob}_vid_{local_path}.png", img)
-                else:
-                    # inside
-                    maxs = F.softmax(out, dim=-1)
-                    maxs = [x[1] for x in maxs]
-                    false_negative_indices = (maxs < 0.3).nonzero().numpy().flatten()
 
-                    for idx in false_negative_indices:
-                        img = temp_imgs[idx]
-                        prob = maxs[idx].item()
-                        cv.imwrite(f"false_negative_{fno}_prob_{prob}_vid_{local_path}.png", img)
 
                 # reduce the batch size on the last batch to do the rest of the frames
                 if 0 < int(total_frames - total_batched) < batch_size:
