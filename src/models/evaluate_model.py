@@ -35,7 +35,6 @@ def generate_confusion_matrix(probs, times, truth):
 
         time = times.loc[vid, :]
         time = time[~np.isnan(time)].values
-        print(f'LEN PRED IS {len(pred)} and len time is {len(time)}')
 
         st, et = truth.loc[vid, 'start_time'], truth.loc[vid, 'end_time']
         gt = [1 if t >= st and t <= et else 0 for t in time]

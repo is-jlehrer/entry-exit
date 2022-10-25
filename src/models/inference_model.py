@@ -132,17 +132,20 @@ class InferenceModel:
                     maxs = F.softmax(out, dim=-1)
                     maxs = [x[1] for x in maxs]
                     false_positives_indices = (maxs > 0.5).nonzero().numpy().flatten()
-                    false_positives_imgs = np.array(temp_imgs)[[false_positives_indices]]
-                    for img in false_positives_imgs:
-                        cv.imwrite(f"false_positive_{fno}.png", img)
+                    for idx in false_positives_indices:
+                        img = temp_imgs[idx]
+                        prob = maxs[idx].item()
+                        cv.imwrite(f"false_positive_{fno}_prob_{prob}.png", img)
                 else:
                     # inside
                     maxs = F.softmax(out, dim=-1)
                     maxs = [x[1] for x in maxs]
-                    false_positives_indices = (maxs < 0.3).nonzero().numpy().flatten()
-                    false_positives_imgs = np.array(temp_imgs)[[false_positives_indices]]
-                    for img in false_positives_imgs:
-                        cv.imwrite(f"false_negative_{fno}.png", img)
+                    false_negative_indices = (maxs < 0.3).nonzero().numpy().flatten()
+
+                    for idx in false_negative_indices:
+                        img = temp_imgs[idx]
+                        prob = maxs[idx].item()
+                        cv.imwrite(f"false_negative_{fno}_prob_{prob}.png", img)
 
                 # reduce the batch size on the last batch to do the rest of the frames
                 if 0 < int(total_frames - total_batched) < batch_size:
