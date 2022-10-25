@@ -235,7 +235,7 @@ if __name__ == "__main__":
     )
 
     holdout_csv = format_data_csv(args["metadata"], "", dropna=False)  # dont need path to decomped dataset, just leave blank
-    uris = holdout_csv["origin_uri"].values if args["limit"] is None else holdout_csv["origin_uri"].values[0: args["limit"]]
+    uris = holdout_csv.iloc[0: args['limit']] if 'limit' in args else holdout_csv
     print("Doing inference on", len(uris), "number of videos")
 
     preds = inference_wrapper.predict_from_uris(
