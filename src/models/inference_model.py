@@ -136,7 +136,7 @@ class InferenceModel:
                         for idx in false_positives_indices:
                             img = temp_imgs[idx]
                             prob = maxs[idx].item()
-                            cv.imwrite(f"false_positive_{fno}_prob_{prob}_vid_{local_path}.png", img)
+                            img.save(f"false_positive_{fno}_prob_{prob}_vid_{local_path}.png")
                     else:
                         # inside
                         print(f'INSIDE: Time is {time=}, {start_time=}, {end_time=}')
@@ -147,7 +147,7 @@ class InferenceModel:
                             print(f'Writing img {idx}')
                             img = temp_imgs[idx]
                             prob = maxs[idx].item()
-                            cv.imwrite(f"false_negative_{fno}_prob_{prob}_vid_{local_path}.png", img)
+                            img.save(f"false_negative_{fno}_prob_{prob}_vid_{local_path}.png")
                     #########################################################
 
                     preds.extend(out)
