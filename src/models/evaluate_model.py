@@ -28,7 +28,7 @@ THRESH = 0.5
 def generate_confusion_matrix(probs, times, truth):
     preds, truths = [], []
 
-    for vid in probs.index:
+    for vid in truth.index:
         pred = probs.loc[vid, :]
         pred = pred.apply(lambda x: int(x > THRESH))
         pred = pred[~np.isnan(pred)].values
@@ -47,7 +47,7 @@ def generate_confusion_matrix(probs, times, truth):
 
 def generate_roc_curve(probs, times, truth):
     scores, truths = [], []
-    for vid in probs.index:
+    for vid in truth.index:
         score = probs.loc[vid, :]
         score = score[~np.isnan(score)].values
 
