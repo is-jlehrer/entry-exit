@@ -81,7 +81,7 @@ def generate_validation_statistics(probs, times, truth):
         score = [1 if x > 0.5 else 0 for x in score]
 
         if len(gt) != len(score):
-            print('WARNING: Missing some probabilities. Continuing')
+            print(f'WARNING: Missing {len(time) - len(score)} probabilities. Continuing')
             print(f'len(scores)={len(score)} & len(times)={len(time)}')
             gt = gt[0: len(score)]
 
