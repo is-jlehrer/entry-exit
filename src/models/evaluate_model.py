@@ -36,7 +36,7 @@ def generate_confusion_matrix(probs, times, truth):
         st, et = truth.loc[vid, 'start_time'], truth.loc[vid, 'end_time']
         gt = [1 if t >= st and t <= et else 0 for t in times.loc[vid, :].values]
         if len(gt) > len(pred):
-            print(f'WARNING: Missing {len(gt) - len(pred)} probabilities. Continuing')
+            print(f'WARNING: Missing {len(gt) - len(pred)} probabilities in confusion matrix calc. Continuing')
             gt = gt[0: len(pred)]
 
         preds.extend(pred)
@@ -54,7 +54,7 @@ def generate_roc_curve(probs, times, truth):
         st, et = truth.loc[vid, 'start_time'], truth.loc[vid, 'end_time']
         gt = [1 if t >= st and t <= et else 0 for t in times.loc[vid, :].values]
         if len(gt) > len(score):
-            print(f'WARNING: Missing {len(gt) - len(score)} probabilities. Continuing')
+            print(f'WARNING: Missing {len(gt) - len(score)} probabilities in roc curve calc. Continuing')
             gt = gt[0: len(score)]
 
         scores.extend(score)
@@ -81,7 +81,7 @@ def generate_validation_statistics(probs, times, truth):
         score = [1 if x > 0.5 else 0 for x in score]
 
         if len(gt) != len(score):
-            print(f'WARNING: Missing {len(time) - len(score)} probabilities. Continuing')
+            print(f'WARNING: Missing {len(time) - len(score)} probabilities in acc/f1 score. Continuing')
             print(f'len(scores)={len(score)} & len(times)={len(time)}')
             gt = gt[0: len(score)]
 
