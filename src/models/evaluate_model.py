@@ -30,8 +30,8 @@ def generate_confusion_matrix(probs, times, truth):
 
     for vid in truth.index:
         pred = probs.loc[vid, :]
-        pred = pred.apply(lambda x: int(x > THRESH))
         pred = pred[~np.isnan(pred)].values
+        pred = pred.apply(lambda x: int(x > THRESH))
 
         time = times.loc[vid, :]
         time = time[~np.isnan(time)].values
