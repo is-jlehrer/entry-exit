@@ -93,7 +93,6 @@ class InferenceModel:
         with tqdm.tqdm(total=int(total_frames)) as pbar:
             while success:
                 time = cap.get(cv.CAP_PROP_POS_MSEC)
-                print(f'Time is {time=}, {start_time=}, {end_time=}')                
                 # Skip frames until we need to do inference
                 if start_frame > 0 and fno < start_frame:
                     success = cap.read()
@@ -123,10 +122,12 @@ class InferenceModel:
                     with torch.no_grad():
                         batch = torch.stack(batch).to(device)
                         out = self.model(batch)
+
                     # NEW CODE HERE
                     #########################################################
                     # outside
                     if time < start_time or time > end_time:
+                        print(f'OUTSIDE: Time is {time=}, {start_time=}, {end_time=}')
                         maxs = F.softmax(out, dim=-1)[:, 1]
                         false_positives_indices = (maxs > 0.5).cpu().detach().nonzero().numpy().flatten()
                         print('False positive indices are ', false_positives_indices)
@@ -136,6 +137,7 @@ class InferenceModel:
                             cv.imwrite(f"false_positive_{fno}_prob_{prob}_vid_{local_path}.png", img)
                     else:
                         # inside
+                        print(f'INSIDE: Time is {time=}, {start_time=}, {end_time=}')
                         maxs = F.softmax(out, dim=-1)[:, 1]
                         false_negative_indices = (maxs < 0.3).cpu().detach().nonzero().numpy().flatten()
                         print('False negative indices are', false_negative_indices)
