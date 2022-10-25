@@ -130,8 +130,8 @@ class InferenceModel:
 
                     # NEW CODE HERE
                     #########################################################
-                    # outside (-10 seconds from start, + 10 seconds from end to account for annotation errors)
-                    if time < start_time - 10000 or time > end_time + 10000:
+                    # outside (-10 seconds from time of first batch img start, + 10 seconds from end to account for annotation errors)
+                    if temp_times[0] < start_time - 10000 or time > temp_times[-1] + 10000:
                         print(f'OUTSIDE: Time is {time=}, {start_time=}, {end_time=}')
                         maxs = F.softmax(out, dim=-1)[:, 1]
                         false_positives_indices = (maxs > 0.5).cpu().detach().nonzero().numpy().flatten()
