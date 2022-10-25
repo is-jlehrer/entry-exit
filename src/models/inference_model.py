@@ -126,8 +126,7 @@ class InferenceModel:
                     #########################################################
                     # outside
                     if time < start_time or time > end_time:
-                        maxs = F.softmax(out, dim=-1)
-                        maxs = [x[1] for x in maxs]
+                        maxs = F.softmax(out, dim=-1)[:, 1]
                         false_positives_indices = (maxs > 0.5).nonzero().numpy().flatten()
                         for idx in false_positives_indices:
                             img = temp_imgs[idx]
@@ -135,8 +134,7 @@ class InferenceModel:
                             cv.imwrite(f"false_positive_{fno}_prob_{prob}_vid_{local_path}.png", img)
                     else:
                         # inside
-                        maxs = F.softmax(out, dim=-1)
-                        maxs = [x[1] for x in maxs]
+                        maxs = F.softmax(out, dim=-1)[:, 1]
                         false_negative_indices = (maxs < 0.3).nonzero().numpy().flatten()
 
                         for idx in false_negative_indices:
