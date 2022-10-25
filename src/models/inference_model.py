@@ -92,7 +92,8 @@ class InferenceModel:
 
         with tqdm.tqdm(total=int(total_frames)) as pbar:
             while success:
-                time = cap.get(cv.CAP_PROP_POS_MSEC)                
+                time = cap.get(cv.CAP_PROP_POS_MSEC)
+                print(f'Time is {time=}, {start_time=}, {end_time=}')                
                 # Skip frames until we need to do inference
                 if start_frame > 0 and fno < start_frame:
                     success = cap.read()
@@ -139,6 +140,7 @@ class InferenceModel:
                         false_negative_indices = (maxs < 0.3).cpu().detach().nonzero().numpy().flatten()
                         print('False negative indices are', false_negative_indices)
                         for idx in false_negative_indices:
+                            print(f'Writing img {idx}')
                             img = temp_imgs[idx]
                             prob = maxs[idx].item()
                             cv.imwrite(f"false_negative_{fno}_prob_{prob}_vid_{local_path}.png", img)
@@ -146,8 +148,6 @@ class InferenceModel:
                     preds.extend(out)
                     batch = []
                     temp_imgs = []
-
-
 
                 # reduce the batch size on the last batch to do the rest of the frames
                 if 0 < int(total_frames - total_batched) < batch_size:
