@@ -36,7 +36,7 @@ def generate_confusion_matrix(probs, times, truth):
         st, et = truth.loc[vid, 'start_time'], truth.loc[vid, 'end_time']
         gt = [1 if t >= st and t <= et else 0 for t in times.loc[vid, :].values]
         if len(gt) > len(pred):
-            print('WARNING: Missing some probabilities. Continuing')
+            print(f'WARNING: Missing {len(gt) - len(pred)} probabilities. Continuing')
             gt = gt[0: len(pred)]
 
         preds.extend(pred)
@@ -54,7 +54,7 @@ def generate_roc_curve(probs, times, truth):
         st, et = truth.loc[vid, 'start_time'], truth.loc[vid, 'end_time']
         gt = [1 if t >= st and t <= et else 0 for t in times.loc[vid, :].values]
         if len(gt) > len(score):
-            print('WARNING: Missing some probabilities. Continuing')
+            print(f'WARNING: Missing {len(gt) - len(score)} probabilities. Continuing')
             gt = gt[0: len(score)]
 
         scores.extend(score)
