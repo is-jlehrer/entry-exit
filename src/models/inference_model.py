@@ -87,12 +87,13 @@ class InferenceModel:
         batch: tp.List[torch.Tensor] = []
         times_milliseconds: tp.List[int] = []
         temp_imgs = []
+        temp_times = []
 
         total_frames = cap.get(cv.CAP_PROP_FRAME_COUNT) / sample_rate if end_frame is None else end_frame / sample_rate
 
         with tqdm.tqdm(total=int(total_frames)) as pbar:
             while success:
-                time = cap.get(cv.CAP_PROP_POS_MSEC)
+                
                 # Skip frames until we need to do inference
                 if start_frame > 0 and fno < start_frame:
                     success = cap.read()
@@ -105,12 +106,14 @@ class InferenceModel:
 
                 if fno % sample_rate == 0:
                     _, img = cap.retrieve()
+                    time = cap.get(cv.CAP_PROP_POS_MSEC)
 
                     # same as in decomp!
                     img = cv.cvtColor(img, cv.COLOR_BGR2RGB)
                     img = Image.fromarray(img)
                     # Save img for error analysis
                     temp_imgs.append(img)
+                    temp_times.append(time)
 
                     img = self.transform(img)
 
@@ -127,8 +130,8 @@ class InferenceModel:
 
                     # NEW CODE HERE
                     #########################################################
-                    # outside
-                    if time < start_time or time > end_time:
+                    # outside (-10 seconds from start, + 10 seconds from end to account for annotation errors)
+                    if time < start_time - 10000 or time > end_time + 10000:
                         print(f'OUTSIDE: Time is {time=}, {start_time=}, {end_time=}')
                         maxs = F.softmax(out, dim=-1)[:, 1]
                         false_positives_indices = (maxs > 0.5).cpu().detach().nonzero().numpy().flatten()
@@ -153,6 +156,7 @@ class InferenceModel:
                     preds.extend(out)
                     batch = []
                     temp_imgs = []
+                    temp_times = []
 
                 # reduce the batch size on the last batch to do the rest of the frames
                 if 0 < int(total_frames - total_batched) < batch_size:
@@ -241,7 +245,7 @@ if __name__ == "__main__":
         transform=inference_transform,
     )
 
-    holdout_csv = format_data_csv(args["metadata"], "", dropna=False)  # dont need path to decomped dataset, just leave blank
+    holdout_csv = format_data_csv(args["metadata"], "", dropna=True)  # dont need path to decomped dataset, just leave blank
     uris = holdout_csv.iloc[0: args['limit'], :] if 'limit' in args else holdout_csv
     print("Doing inference on", len(uris), "number of videos")
 
