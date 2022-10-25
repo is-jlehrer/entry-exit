@@ -145,6 +145,8 @@ class InferenceModel:
                             print(f'Writing img {idx}')
                             img = temp_imgs[idx]
                             prob = maxs[idx].item()
+                            print(img)
+                            print(prob)
                             cv.imwrite(f"false_negative_{fno}_prob_{prob}_vid_{local_path}.png", img)
                     #########################################################
                     preds.extend(out)
