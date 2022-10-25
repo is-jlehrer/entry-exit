@@ -105,11 +105,13 @@ class InferenceModel:
 
                 if fno % sample_rate == 0:
                     _, img = cap.retrieve()
-                    temp_imgs.append(img)
 
                     # same as in decomp!
                     img = cv.cvtColor(img, cv.COLOR_BGR2RGB)
                     img = Image.fromarray(img)
+                    # Save img for error analysis
+                    temp_imgs.append(img)
+
                     img = self.transform(img)
 
                     # collect image and frame index (to get time)
@@ -145,10 +147,9 @@ class InferenceModel:
                             print(f'Writing img {idx}')
                             img = temp_imgs[idx]
                             prob = maxs[idx].item()
-                            print(img)
-                            print(prob)
                             cv.imwrite(f"false_negative_{fno}_prob_{prob}_vid_{local_path}.png", img)
                     #########################################################
+
                     preds.extend(out)
                     batch = []
                     temp_imgs = []
