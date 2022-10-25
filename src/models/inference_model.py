@@ -49,7 +49,7 @@ class InferenceModel:
         os.makedirs(local_path, exist_ok=True)
         preds = []
         for idx in uris.index:
-            uri, st, et = uris.loc[idx, 'origin_uri'], uris.loc[idx, 'start_time'], uris.loc[idx, 'end_time']
+            uri, st, et = uris.loc[idx, "origin_uri"], uris.loc[idx, "start_time"], uris.loc[idx, "end_time"]
             local_file = os.path.join(local_path, uri.split("/")[-1])
             download_from_uri(uri, local_file)
 
@@ -93,7 +93,7 @@ class InferenceModel:
 
         with tqdm.tqdm(total=int(total_frames)) as pbar:
             while success:
-                
+
                 # Skip frames until we need to do inference
                 if start_frame > 0 and fno < start_frame:
                     success = cap.read()
@@ -132,25 +132,35 @@ class InferenceModel:
                     #########################################################
                     # outside (-10 seconds from time of first batch img start, + 10 seconds from end to account for annotation errors)
                     if temp_times[0] < start_time - 10000 or time > temp_times[-1] + 10000:
-                        print(f'OUTSIDE: Time is {time=}, {start_time=}, {end_time=}')
+                        print(f"OUTSIDE: Time is {time=}, {start_time=}, {end_time=}")
                         maxs = F.softmax(out, dim=-1)[:, 1]
                         false_positives_indices = (maxs > 0.5).cpu().detach().nonzero().numpy().flatten()
-                        print('False positive indices are ', false_positives_indices)
+                        print("False positive indices are ", false_positives_indices)
                         for idx in false_positives_indices:
                             img = temp_imgs[idx]
                             prob = maxs[idx].item()
-                            img.save(f"false_positive_{fno}_prob_{prob}_vid_{local_path.split('/')[-1]}.png")
+                            img.save(
+                                os.path.join(
+                                    "img_error_analysis_8inside_40outside_DEPLOY",
+                                    f"false_positive_{fno}_prob_{prob}_vid_{local_path.split('/')[-1]}.png",
+                                )
+                            )
                     else:
                         # inside
-                        print(f'INSIDE: Time is {time=}, {start_time=}, {end_time=}')
+                        print(f"INSIDE: Time is {time=}, {start_time=}, {end_time=}")
                         maxs = F.softmax(out, dim=-1)[:, 1]
                         false_negative_indices = (maxs < 0.3).cpu().detach().nonzero().numpy().flatten()
-                        print('False negative indices are', false_negative_indices)
+                        print("False negative indices are", false_negative_indices)
                         for idx in false_negative_indices:
-                            print(f'Writing img {idx}')
+                            print(f"Writing img {idx}")
                             img = temp_imgs[idx]
                             prob = maxs[idx].item()
-                            img.save(f"false_negative_{fno}_prob_{prob}_vid_{local_path.split('/')[-1]}.png")
+                            img.save(
+                                os.path.join(
+                                    "img_error_analysis_8inside_40outside_DEPLOY",
+                                    f"false_negative_{fno}_prob_{prob}_vid_{local_path.split('/')[-1]}.png",
+                                )
+                            )
                     #########################################################
 
                     preds.extend(out)
@@ -246,7 +256,7 @@ if __name__ == "__main__":
     )
 
     holdout_csv = format_data_csv(args["metadata"], "", dropna=True)  # dont need path to decomped dataset, just leave blank
-    uris = holdout_csv.iloc[0: args['limit'], :] if 'limit' in args else holdout_csv
+    uris = holdout_csv.iloc[0 : args["limit"], :] if "limit" in args else holdout_csv
     print("Doing inference on", len(uris), "number of videos")
 
     preds = inference_wrapper.predict_from_uris(
