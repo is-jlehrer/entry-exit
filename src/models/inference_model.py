@@ -149,7 +149,7 @@ class InferenceModel:
                         # inside
                         print(f"INSIDE: Time is {time=}, {start_time=}, {end_time=}")
                         maxs = F.softmax(out, dim=-1)[:, 1]
-                        false_negative_indices = (maxs < 0.3).cpu().detach().nonzero().numpy().flatten()
+                        false_negative_indices = (maxs < 0.5).cpu().detach().nonzero().numpy().flatten()
                         print("False negative indices are", false_negative_indices)
                         for idx in false_negative_indices:
                             print(f"Writing img {idx}")
