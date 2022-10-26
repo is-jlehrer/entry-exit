@@ -5,20 +5,26 @@ import sys
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 import argparse
-from tqdm import tqdm
+import os
+
 import numpy as np
+import pytorch_lightning as pl
 import torch
 import torch.nn as nn
 import torch.optim as optim
 import torchvision.models as models
+from lightml.common.model import FrameLevelModule
 from lightml.data.make_dataset import Loaders, StandardImageDataset
 from lightml.models.train_model import TrainModel
-from pytorch_lightning.callbacks import EarlyStopping, LearningRateMonitor, ModelCheckpoint, StochasticWeightAveraging
+from pytorch_lightning.callbacks import (EarlyStopping, LearningRateMonitor,
+                                         ModelCheckpoint,
+                                         StochasticWeightAveraging)
 from pytorch_lightning.loggers import WandbLogger
 from torch.utils.data import DataLoader
-from torchmetrics import Accuracy, F1Score, Precision, Recall
-import pytorch_lightning as pl
-import os
+from tqdm import tqdm
+import torch.functional as F
+from sklearn.metrics import accuracy_score, f1_score, precision_score, recall_score, roc_auc_score, confusion_matrix
+import wandb 
 
 here = pathlib.Path(__file__).parent.resolve()
 from utils import get_transforms
@@ -135,6 +141,25 @@ class TorchModelCallback(pl.Callback):
         torch.save(model.state_dict(), os.path.join(self.path, f"model-checkpoint-epoch-{epoch}"))
 
 
+class CustomFrameModule(FrameLevelModule):
+    def __log_metrics(self, phase, preds, labels):
+        preds = F.softmax(preds)[:, 1]  
+        # get probabilities of first class 
+        preds = (preds > 0.5).float()
+
+        metrics = {
+            "accuracy": accuracy_score, 
+            "f1": f1_score, 
+            "precision": precision_score, 
+            "recall": recall_score, 
+            "auc": roc_auc_score,
+        }
+
+        for name, metric in metrics.items():
+            res = metric(labels, preds)
+            self.log(f"{phase}_{name}", res)
+
+
 if __name__ == "__main__":
     params = generate_parser()
     train, val = generate_dataloaders(params["dataset_path"])
@@ -172,13 +197,16 @@ if __name__ == "__main__":
             "optimizer": optimizer,
             "scheduler": optim.lr_scheduler.ReduceLROnPlateau(optimizer, factor=0.75),
             "loss": nn.CrossEntropyLoss(weight=calculate_weights(params["dataset_path"]) if params["class_weights"] else None),
-            "metrics": {
-                "micro_accuracy": Accuracy().to(device),
-                "precision": Precision(average="macro", num_classes=2).to(device),
-                "recall": Recall(average="macro", num_classes=2).to(device),
-                "f1": F1Score(average="macro", num_classes=2).to(device),
-            },
+            # "metrics": {
+            #     "micro_accuracy": Accuracy().to(device),
+            #     "precision": Precision(average="macro", num_classes=2).to(device),
+            #     "recall": Recall(average="macro", num_classes=2).to(device),
+            #     "f1": F1Score(average="macro", num_classes=2).to(device),
+            # },
         },
     )
+
+    # overwrite this so we can log custom metrics
+    train_handler.model = CustomFrameModule(model, train_handler.model_config)
 
     train_handler.fit(train, val)
