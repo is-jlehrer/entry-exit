@@ -169,7 +169,7 @@ class CustomFrameModule(FrameLevelModule):
             class_names=["outside", "inside"]
         )
 
-        self.logger.log({"conf_mat": cm})
+        self.logger.experiment.log({"conf_mat": cm})
 
 
 if __name__ == "__main__":
