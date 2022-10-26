@@ -142,7 +142,7 @@ class TorchModelCallback(pl.Callback):
 
 
 class CustomFrameModule(FrameLevelModule):
-    def __log_metrics(self, phase, preds, labels):
+    def _FrameLevelModule__log_metrics(self, phase, preds, labels):
         preds = F.softmax(preds)[:, 1]  
         # get probabilities of first class 
         preds = (preds > 0.5).float()
@@ -203,6 +203,7 @@ if __name__ == "__main__":
     # overwrite this so we can log custom metrics
     print(train_handler.model_config)
     train_handler.model = CustomFrameModule(model, train_handler.model_config)
+    print(train_handler.model.__log_metrics)
 
     print(type(train_handler.model))
     train_handler.fit(train, val)
