@@ -52,7 +52,7 @@ def generate_dataloaders(path):
     print('Validation set has path', os.path.join(here, "..", "varying_vid_fixed_sample_decomp", "val", "val"))
 
     train = DataLoader(train, shuffle=True, batch_size=64, num_workers=32)
-    val = DataLoader(val, shuffle=False, batch_size=64, num_workers=32)
+    val = DataLoader(val, shuffle=True, batch_size=64, num_workers=32)
 
     return train, val
 
