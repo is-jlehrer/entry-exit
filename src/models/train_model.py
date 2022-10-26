@@ -205,4 +205,4 @@ if __name__ == "__main__":
     train_handler.model = CustomFrameModule(model, train_handler.model_config)
 
     print(type(train_handler.model))
-    # train_handler.fit(train, val)
+    train_handler.fit(train, val)
