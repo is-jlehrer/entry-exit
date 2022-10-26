@@ -24,6 +24,14 @@ here = pathlib.Path(__file__).parent.resolve()
 from utils import get_transforms
 
 
+def calculate_weights(path):
+    n_inside = len(os.listdir(os.path.join(path, "train", "inside")))
+    n_outside = len(os.listdir(os.path.join(path, "train", "outside")))
+    s = n_inside + n_outside
+
+    return torch.from_numpy(np.array([s / (2 * n_outside), s / (2 * n_inside)])).float()
+
+
 def generate_dataloaders(path):
     transform = get_transforms()
     train = StandardImageDataset(
@@ -39,14 +47,6 @@ def generate_dataloaders(path):
     val = DataLoader(val, shuffle=False, batch_size=64, num_workers=32)
 
     return train, val
-
-
-def calculate_weights(path):
-    n_inside = len(os.listdir(os.path.join(path, "train", "inside")))
-    n_outside = len(os.listdir(os.path.join(path, "train", "outside")))
-    s = n_inside + n_outside
-
-    return torch.from_numpy(np.array([s / (2 * n_outside), s / (2 * n_inside)])).float()
 
 
 def generate_parser():
@@ -136,6 +136,7 @@ class TorchModelCallback(pl.Callback):
 if __name__ == "__main__":
     params = generate_parser()
     train, val = generate_dataloaders(params["dataset_path"])
+    print("Dataset path is", params["dataset_path"])
 
     model = eval(f"models.{params['model']}()")
     model.fc = nn.Linear(in_features=model.fc.in_features, out_features=2)
@@ -157,15 +158,7 @@ if __name__ == "__main__":
             "max_epochs": 500,
             "logger": WandbLogger(project="Julian EntryExit", name=params["name"]),
             "callbacks": [
-                ModelCheckpoint(
-                    dirpath=os.path.join(here, params["name"]),
-                    filename="model-{epoch}",
-                    monitor="val_loss",
-                    mode="min",
-                    save_top_k=-1,
-                ),
                 LearningRateMonitor(logging_interval="epoch"),
-                # EarlyStopping(monitor="val_loss", patience=5),
                 StochasticWeightAveraging(swa_lrs=0.01),
                 savingcallback,
             ],
