@@ -145,6 +145,10 @@ class CustomFrameModule(FrameLevelModule):
     def _FrameLevelModule__log_metrics(self, phase, preds, labels):
         preds = F.softmax(preds, dim=-1)[:, 1]  
         # get probabilities of first class 
+
+        # log auc before we convert to binary predictions
+        self.log(f"{phase}_auc", roc_auc_score(labels, preds))
+
         preds = (preds > 0.5).cpu().float().numpy()
         labels = labels.cpu().numpy()
 
@@ -153,12 +157,19 @@ class CustomFrameModule(FrameLevelModule):
             "f1": f1_score, 
             "precision": precision_score, 
             "recall": recall_score, 
-            "auc": roc_auc_score,
         }
 
         for name, metric in metrics.items():
             res = metric(labels, preds)
             self.log(f"{phase}_{name}", res)
+
+        cm = wandb.plot.confusion_matrix(
+            y_true=labels,
+            preds=preds,
+            class_names=["outside", "inside"]
+        )
+
+        self.logger.log({"conf_mat": cm})
 
 
 if __name__ == "__main__":
