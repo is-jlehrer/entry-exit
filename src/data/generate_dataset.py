@@ -198,25 +198,26 @@ if __name__ == "__main__":
     os.makedirs(path, exist_ok=True)
 
     print("Reading in csv...")
-    train = format_data_csv(os.path.join(curr, "train_na_stratified.csv"), path)
-    # val = format_data_csv(os.path.join(curr, "val_na_stratified.csv"), path)
+    # train = format_data_csv(os.path.join(curr, "train_na_stratified.csv"), path)
+    # print(f'Total train vids is {len(train)}')
+    val = format_data_csv(os.path.join(curr, "val_na_stratified.csv"), path)
 
-    if num_vids is not None:
-        train = train.sample(num_vids)
+    # if num_vids is not None:
+    #     train = train.sample(num_vids)
 
-    decomp_all_files(
-        train,
-        local_path=os.path.join(path, "train"),
-        n_workers=num_workers,
-        format=".png",
-        outside_prop=outside,
-        inside_prop=inside,
-    )
     # decomp_all_files(
-    #     val,
-    #     local_path=os.path.join(path, "val"),
+    #     train,
+    #     local_path=os.path.join(path, "train"),
     #     n_workers=num_workers,
     #     format=".png",
     #     outside_prop=outside,
     #     inside_prop=inside,
     # )
+    decomp_all_files(
+        val,
+        local_path=os.path.join(path, "val"),
+        n_workers=num_workers,
+        format=".png",
+        outside_prop=outside,
+        inside_prop=inside,
+    )
