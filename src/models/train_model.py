@@ -143,7 +143,7 @@ class TorchModelCallback(pl.Callback):
 
 class CustomFrameModule(FrameLevelModule):
     def _FrameLevelModule__log_metrics(self, phase, preds, labels):
-        preds = F.softmax(preds)[:, 1]  
+        preds = F.softmax(preds, dim=-1)[:, 1]  
         # get probabilities of first class 
         preds = (preds > 0.5).cpu().float().numpy()
         labels = labels.cpu().numpy()
