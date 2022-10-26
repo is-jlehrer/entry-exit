@@ -145,12 +145,14 @@ class CustomFrameModule(FrameLevelModule):
     def _FrameLevelModule__log_metrics(self, phase, preds, labels):
         preds = F.softmax(preds, dim=-1)[:, 1]  
         # get probabilities of first class 
+        preds = preds.detach().cpu()
+        labels = labels.detach().cpu()
 
         # log auc before we convert to binary predictions
-        self.log(f"{phase}_auc", roc_auc_score(labels.cpu().numpy(), preds.cpu().numpy()))
+        self.log(f"{phase}_auc", roc_auc_score(labels.numpy(), preds.numpy()))
 
-        preds = (preds > 0.5).cpu().float().numpy()
-        labels = labels.cpu().numpy()
+        preds = (preds > 0.5).float().numpy()
+        labels = labels.numpy()
 
         metrics = {
             "accuracy": accuracy_score, 
