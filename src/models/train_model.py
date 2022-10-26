@@ -149,7 +149,7 @@ class CustomFrameModule(FrameLevelModule):
         labels = labels.detach().cpu()
 
         # log auc before we convert to binary predictions
-        self.log(f"{phase}_auc", roc_auc_score(labels.numpy(), preds.numpy()))
+        self.log(f"{phase}_auc", roc_auc_score(labels.numpy(), preds.numpy()), on_step=True)
 
         preds = (preds > 0.5).float().numpy()
         labels = labels.numpy()
@@ -163,7 +163,7 @@ class CustomFrameModule(FrameLevelModule):
 
         for name, metric in metrics.items():
             res = metric(labels, preds)
-            self.log(f"{phase}_{name}", res)
+            self.log(f"{phase}_{name}", res, on_step=True)
 
         cm = wandb.plot.confusion_matrix(
             y_true=labels,
@@ -205,7 +205,6 @@ if __name__ == "__main__":
             ],
             "accelerator": "gpu",
             "devices": 1,
-            "limit_val_batches": 10,
         },
         model_config={
             "optimizer": optimizer,
