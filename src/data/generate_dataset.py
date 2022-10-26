@@ -189,7 +189,7 @@ if __name__ == "__main__":
     )
 
     parser.add_argument(
-        "--num-vids", type=str, default=None, required=False, help="If passed, only decomp this number of training vids"
+        "--num-vids", type=int, default=None, required=False, help="If passed, only decomp this number of training vids"
     )
 
     args = parser.parse_args()
