@@ -13,14 +13,12 @@ import torch.optim as optim
 import torchvision.models as models
 from lightml.data.make_dataset import Loaders, StandardImageDataset
 from lightml.models.train_model import TrainModel
-from pytorch_lightning.callbacks import (EarlyStopping, LearningRateMonitor,
-                                         ModelCheckpoint,
-                                         StochasticWeightAveraging)
+from pytorch_lightning.callbacks import EarlyStopping, LearningRateMonitor, ModelCheckpoint, StochasticWeightAveraging
 from pytorch_lightning.loggers import WandbLogger
 from torch.utils.data import DataLoader
 from torchmetrics import Accuracy, F1Score, Precision, Recall
 import pytorch_lightning as pl
-import os 
+import os
 
 here = pathlib.Path(__file__).parent.resolve()
 from utils import get_transforms
@@ -31,7 +29,11 @@ def generate_dataloaders(path):
     train = StandardImageDataset(
         root=os.path.join(path, "train"), transform=transform["train"], label_map={"inside": 1, "outside": 0}
     )
-    val = StandardImageDataset(root=os.path.join(here, '..', 'varying_vid_fixed_sample_decomp', 'val'), transform=transform["val"], label_map={"inside": 1, "outside": 0})
+    val = StandardImageDataset(
+        root=os.path.join(here, "..", "varying_vid_fixed_sample_decomp", "val", "val"),
+        transform=transform["val"],
+        label_map={"inside": 1, "outside": 0},
+    )
 
     train = DataLoader(train, shuffle=True, batch_size=64, num_workers=32)
     val = DataLoader(val, shuffle=False, batch_size=64, num_workers=32)
@@ -103,8 +105,8 @@ def generate_parser():
 
 
 def calculate_mean_std(loader, total=100):
-    mean = 0.
-    std = 0.
+    mean = 0.0
+    std = 0.0
     for i, (images, _) in enumerate(tqdm(loader)):
         if i == total:
             break
@@ -122,13 +124,13 @@ class TorchModelCallback(pl.Callback):
     def __init__(self, path) -> None:
         super().__init__()
         os.makedirs(path, exist_ok=True)
-        self.path = path 
+        self.path = path
 
     def on_train_epoch_end(self, trainer, pl_module):
         epoch = trainer.current_epoch
         model = pl_module.model
 
-        torch.save(model.state_dict(), os.path.join(self.path, f'model-checkpoint-epoch-{epoch}'))
+        torch.save(model.state_dict(), os.path.join(self.path, f"model-checkpoint-epoch-{epoch}"))
 
 
 if __name__ == "__main__":
