@@ -147,7 +147,7 @@ class CustomFrameModule(FrameLevelModule):
         # get probabilities of first class 
 
         # log auc before we convert to binary predictions
-        self.log(f"{phase}_auc", roc_auc_score(labels, preds))
+        self.log(f"{phase}_auc", roc_auc_score(labels.cpu().numpy(), preds.cpu().numpy()))
 
         preds = (preds > 0.5).cpu().float().numpy()
         labels = labels.cpu().numpy()
