@@ -131,37 +131,37 @@ class InferenceModel:
                     # NEW CODE HERE
                     #########################################################
                     # outside (-5 seconds from time of first batch img start, + 5 seconds from end to account for annotation errors)
-                    if temp_times[0] < start_time - 5000 or temp_times[-1] > end_time + 5000:
-                        print(f"OUTSIDE: Batch start time is {temp_times[0]=}, {start_time=}, {end_time=}")
-                        maxs = F.softmax(out, dim=-1)[:, 1]
-                        false_positives_indices = (maxs > 0.5).cpu().detach().nonzero().numpy().flatten()
-                        print("False positive indices are ", false_positives_indices)
-                        for idx in false_positives_indices:
-                            img = temp_imgs[idx]
-                            prob = maxs[idx].item()
-                            img.save(
-                                os.path.join(
-                                    "img_error_analysis_8inside_40outside_DEPLOY",
-                                    f"false_positive_{fno}_prob_{prob}_vid_{local_path.split('/')[-1]}.png",
-                                )
-                            )
-                    # again, buffer 5 seconds due to noisy annotations
-                    if temp_times[0] > start_time + 5000 or temp_times[-1] < end_time - 5000:
-                        # inside
-                        print(f"INSIDE: Batch start time is {temp_times[0]=}, {start_time=}, {end_time=}")
-                        maxs = F.softmax(out, dim=-1)[:, 1]
-                        false_negative_indices = (maxs < 0.5).cpu().detach().nonzero().numpy().flatten()
-                        print("False negative indices are", false_negative_indices)
-                        for idx in false_negative_indices:
-                            print(f"Writing img {idx}")
-                            img = temp_imgs[idx]
-                            prob = maxs[idx].item()
-                            img.save(
-                                os.path.join(
-                                    "img_error_analysis_8inside_40outside_DEPLOY",
-                                    f"false_negative_{fno}_prob_{prob}_vid_{local_path.split('/')[-1]}.png",
-                                )
-                            )
+                    # if temp_times[0] < start_time - 5000 or temp_times[-1] > end_time + 5000:
+                    #     print(f"OUTSIDE: Batch start time is {temp_times[0]=}, {start_time=}, {end_time=}")
+                    #     maxs = F.softmax(out, dim=-1)[:, 1]
+                    #     false_positives_indices = (maxs > 0.5).cpu().detach().nonzero().numpy().flatten()
+                    #     print("False positive indices are ", false_positives_indices)
+                    #     for idx in false_positives_indices:
+                    #         img = temp_imgs[idx]
+                    #         prob = maxs[idx].item()
+                    #         img.save(
+                    #             os.path.join(
+                    #                 "img_error_analysis_8inside_40outside_DEPLOY",
+                    #                 f"false_positive_{fno}_prob_{prob}_vid_{local_path.split('/')[-1]}.png",
+                    #             )
+                    #         )
+                    # # again, buffer 5 seconds due to noisy annotations
+                    # if temp_times[0] > start_time + 5000 or temp_times[-1] < end_time - 5000:
+                    #     # inside
+                    #     print(f"INSIDE: Batch start time is {temp_times[0]=}, {start_time=}, {end_time=}")
+                    #     maxs = F.softmax(out, dim=-1)[:, 1]
+                    #     false_negative_indices = (maxs < 0.5).cpu().detach().nonzero().numpy().flatten()
+                    #     print("False negative indices are", false_negative_indices)
+                    #     for idx in false_negative_indices:
+                    #         print(f"Writing img {idx}")
+                    #         img = temp_imgs[idx]
+                    #         prob = maxs[idx].item()
+                    #         img.save(
+                    #             os.path.join(
+                    #                 "img_error_analysis_8inside_40outside_DEPLOY",
+                    #                 f"false_negative_{fno}_prob_{prob}_vid_{local_path.split('/')[-1]}.png",
+                    #             )
+                    #         )
                     #########################################################
 
                     preds.extend(out)
