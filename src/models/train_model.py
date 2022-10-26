@@ -197,16 +197,11 @@ if __name__ == "__main__":
             "optimizer": optimizer,
             "scheduler": optim.lr_scheduler.ReduceLROnPlateau(optimizer, factor=0.75),
             "loss": nn.CrossEntropyLoss(weight=calculate_weights(params["dataset_path"]) if params["class_weights"] else None),
-            # "metrics": {
-            #     "micro_accuracy": Accuracy().to(device),
-            #     "precision": Precision(average="macro", num_classes=2).to(device),
-            #     "recall": Recall(average="macro", num_classes=2).to(device),
-            #     "f1": F1Score(average="macro", num_classes=2).to(device),
-            # },
         },
     )
 
     # overwrite this so we can log custom metrics
     train_handler.model = CustomFrameModule(model, train_handler.model_config)
 
-    train_handler.fit(train, val)
+    print(train_handler.model)
+    # train_handler.fit(train, val)
