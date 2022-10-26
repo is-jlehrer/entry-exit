@@ -149,7 +149,7 @@ class CustomFrameModule(FrameLevelModule):
         labels = labels.detach().cpu()
 
         # log auc before we convert to binary predictions
-        self.log(f"{phase}_auc", roc_auc_score(labels.numpy(), preds.numpy()), on_step=True)
+        self.log(f"{phase}_auc", roc_auc_score(labels.numpy(), preds.numpy()), on_step=True, on_epoch=True)
 
         preds = (preds > 0.5).float().numpy()
         labels = labels.numpy()
@@ -171,7 +171,7 @@ class CustomFrameModule(FrameLevelModule):
             class_names=["outside", "inside"]
         )
 
-        self.logger.experiment.log({"conf_mat": cm})
+        self.logger.experiment.log({f"{phase}_confusion_matrix": cm})
 
 
 if __name__ == "__main__":
