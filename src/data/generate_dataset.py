@@ -16,11 +16,13 @@ from lightml.data.decomp import DecompFromDataFrame
 from utils import format_data_csv
 import logging
 
-logging.basicConfig(filename='new_decomp_logfile',
-                    filemode='a',
-                    format='%(asctime)s,%(msecs)d %(name)s %(levelname)s %(message)s',
-                    datefmt='%H:%M:%S',
-                    level=logging.DEBUG)
+logging.basicConfig(
+    filename="new_decomp_logfile",
+    filemode="a",
+    format="%(asctime)s,%(msecs)d %(name)s %(levelname)s %(message)s",
+    datefmt="%H:%M:%S",
+    level=logging.DEBUG,
+)
 curr = pathlib.Path(__file__).parent.resolve()
 
 client = boto3.client("s3")
@@ -45,6 +47,7 @@ def download_from_uri(uri, local_path):
             print(e, "continuing...")
 
     return filename
+
 
 def decomp_all_from_one_vid(vid_row, local_path, format, outside_prop, inside_prop, tag):
     st, et, uri, local = (
@@ -74,7 +77,7 @@ def decomp_all_from_one_vid(vid_row, local_path, format, outside_prop, inside_pr
     outside_sample_rate = 1 // outside_prop
     inside_sample_rate = 1 // inside_prop
 
-    print(f'Outside sample rate is {outside_sample_rate} and inside sample rate is {inside_sample_rate}')
+    print(f"Outside sample rate is {outside_sample_rate} and inside sample rate is {inside_sample_rate}")
     print("Performing decomp")
     while success:
         if frame_number % (outside_sample_rate if not in_procedure else inside_sample_rate) == 0:
@@ -171,38 +174,44 @@ if __name__ == "__main__":
     )
 
     parser.add_argument(
-        '--path',
-        help='Path to do decomp to',
+        "--path",
+        help="Path to do decomp to",
         required=True,
         type=str,
     )
 
     parser.add_argument(
-        '--num-workers',
+        "--num-workers",
         type=int,
         default=8,
         help="Number of processes to do decomp on",
         required=False,
     )
 
+    parser.add_argument(
+        "--num-vids", type=str, default=None, required=False, help="If passed, only decomp this number of training vids"
+    )
+
     args = parser.parse_args()
-    outside, inside, path, num_workers = args.outside_prop, args.inside_prop, args.path, args.num_workers
-    print('Making decomp path')
+    outside, inside, path, num_workers, num_vids = args.outside_prop, args.inside_prop, args.path, args.num_workers, args.num_vids
+    print("Making decomp path")
     os.makedirs(path, exist_ok=True)
 
     print("Reading in csv...")
-    train = format_data_csv(os.path.join(curr, "train_na_stratified.csv"), path)
+    # train = format_data_csv(os.path.join(curr, "train_na_stratified.csv"), path)
     val = format_data_csv(os.path.join(curr, "val_na_stratified.csv"), path)
-    test = format_data_csv(os.path.join(curr, "test_na_stratified.csv"), path)
 
-    decomp_all_files(
-        train,
-        local_path=os.path.join(path, "train"),
-        n_workers=num_workers,
-        format=".png",
-        outside_prop=outside,
-        inside_prop=inside,
-    )
+    # if num_vids is not None:
+    #     train = train.sample(num_vids)
+
+    # decomp_all_files(
+    #     train,
+    #     local_path=os.path.join(path, "train"),
+    #     n_workers=num_workers,
+    #     format=".png",
+    #     outside_prop=outside,
+    #     inside_prop=inside,
+    # )
     decomp_all_files(
         val,
         local_path=os.path.join(path, "val"),
@@ -211,11 +220,3 @@ if __name__ == "__main__":
         outside_prop=outside,
         inside_prop=inside,
     )
-    # decomp_all_files(
-    #     test,
-    #     local_path=os.path.join(path, "test"),
-    #     n_workers=num_workers,
-    #     format=".png",
-    #     outside_prop=outside,
-    #     inside_prop=inside,
-    # )
