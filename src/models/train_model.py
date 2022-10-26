@@ -164,9 +164,9 @@ if __name__ == "__main__":
                 StochasticWeightAveraging(swa_lrs=0.01),
                 savingcallback,
             ],
-            "track_grad_norm": 2,
             "accelerator": "gpu",
             "devices": 1,
+            "limit_val_batches": 10,
         },
         model_config={
             "optimizer": optimizer,
