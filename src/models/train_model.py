@@ -22,7 +22,7 @@ from pytorch_lightning.callbacks import (EarlyStopping, LearningRateMonitor,
 from pytorch_lightning.loggers import WandbLogger
 from torch.utils.data import DataLoader
 from tqdm import tqdm
-import torch.functional as F
+import torch.nn.functional as F
 from sklearn.metrics import accuracy_score, f1_score, precision_score, recall_score, roc_auc_score, confusion_matrix
 import wandb 
 
