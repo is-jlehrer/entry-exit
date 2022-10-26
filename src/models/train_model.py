@@ -201,7 +201,8 @@ if __name__ == "__main__":
     )
 
     # overwrite this so we can log custom metrics
+    print(train_handler.model_config)
     train_handler.model = CustomFrameModule(model, train_handler.model_config)
 
-    print(train_handler.model)
+    print(type(train_handler.model))
     # train_handler.fit(train, val)
