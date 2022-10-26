@@ -4,17 +4,16 @@ import sys
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
+import argparse
+import concurrent.futures
+import logging
 import pathlib
-import tqdm
+
 import boto3
 import cv2 as cv
+import tqdm
 from PIL import Image
-import concurrent.futures
-import pandas as pd
-import argparse
-from lightml.data.decomp import DecompFromDataFrame
 from utils import format_data_csv
-import logging
 
 logging.basicConfig(
     filename="new_decomp_logfile",

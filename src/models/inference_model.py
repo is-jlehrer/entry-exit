@@ -3,21 +3,22 @@ import sys
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
+import argparse
 import os
 import pathlib
-import argparse
+import typing as tp
+
+import cv2 as cv
 import numpy as np
+import pandas as pd
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
 import torchvision.models as models
-from utils import format_data_csv, get_transforms
-import pandas as pd
-import cv2 as cv
-import typing as tp
-from PIL import Image
 import tqdm
 from lightml.common.defaults import download_from_uri
+from PIL import Image
+from utils import format_data_csv, get_transforms
 
 device = "cuda" if torch.cuda.is_available() else "cpu"
 
@@ -257,7 +258,7 @@ if __name__ == "__main__":
     )
 
     holdout_csv = format_data_csv(args["metadata"], "", dropna=True)  # dont need path to decomped dataset, just leave blank
-    uris = holdout_csv.iloc[0 : args["limit"], :] if "limit" in args else holdout_csv
+    uris = holdout_csv.iloc[0: args["limit"], :] if "limit" in args else holdout_csv
     print("Doing inference on", len(uris), "number of videos")
 
     preds = inference_wrapper.predict_from_uris(
@@ -270,8 +271,8 @@ if __name__ == "__main__":
     probas = pd.DataFrame([x[0] for x in preds])
     times = pd.DataFrame([x[1] for x in preds])
 
-    probas.index = uris
-    times.index = uris
+    probas.index = uris['origin_uri']
+    times.index = uris['origin_uri']
 
     tag = args["name"]
     os.makedirs(os.path.join(here, "inference"), exist_ok=True)
