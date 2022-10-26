@@ -31,7 +31,7 @@ def generate_dataloaders(path):
     train = StandardImageDataset(
         root=os.path.join(path, "train"), transform=transform["train"], label_map={"inside": 1, "outside": 0}
     )
-    val = StandardImageDataset(root=os.path.join(path, "val"), transform=transform["val"], label_map={"inside": 1, "outside": 0})
+    val = StandardImageDataset(root=os.path.join(here, '..', 'varying_vid_fixed_sample_decomp', 'val'), transform=transform["val"], label_map={"inside": 1, "outside": 0})
 
     train = DataLoader(train, shuffle=True, batch_size=64, num_workers=32)
     val = DataLoader(val, shuffle=False, batch_size=64, num_workers=32)
