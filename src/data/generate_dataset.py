@@ -57,6 +57,8 @@ def decomp_all_from_one_vid(vid_row, local_path, format, outside_prop, inside_pr
         vid_row["local_path"],
     )
 
+    print('Local is', local)
+
     print(f"Downloading {uri}")
     download_from_uri(uri, local)
     try:
@@ -94,6 +96,7 @@ def decomp_all_from_one_vid(vid_row, local_path, format, outside_prop, inside_pr
                 in_procedure = False
                 impath = os.path.join(
                     local_path,
+
                     outside_path,
                     f"{tag}_{total_saved}_{frame_number}{format}",
                 )
