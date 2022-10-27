@@ -162,7 +162,7 @@ class CustomFrameModule(FrameLevelModule):
                 res = metric(labels, preds)
                 self.log(f"{phase}_{name}", res, on_step=True, on_epoch=True)
             except Exception as e:
-                print('Couldnt log {name} on {phase}, continuing...')
+                print(f'Couldnt log {name} on {phase}, continuing...')
 
         if phase == "train":
             self.train_agg_preds.append(preds)
