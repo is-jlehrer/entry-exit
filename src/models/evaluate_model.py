@@ -45,8 +45,9 @@ def generate_confusion_matrix(probs, times, truth):
         preds.extend(pred)
         truths.extend(gt)
 
-    matrix = confusion_matrix(y_true=np.array(truths), y_pred=np.array(preds), normalize='all')
-    return matrix 
+    normed_matrix = confusion_matrix(y_true=np.array(truths), y_pred=np.array(preds), normalize='all')
+    matrix = confusion_matrix(y_true=np.array(truths), y_pred=np.array(preds))
+    return normed_matrix, matrix
 
 def generate_roc_curve(probs, times, truth):
     scores, truths = [], []
@@ -147,19 +148,28 @@ if __name__ == "__main__":
     truths = format_data_csv(truths, '', dropna=True)  # decomp path doesnt matter, just leave blank
     truths.index = truths["origin_uri"]
 
-    matrix_vals = generate_confusion_matrix(probs, times, truths)
+    normed_matrix, matrix = generate_confusion_matrix(probs, times, truths)
     fpr, tpr, threshs = generate_roc_curve(probs, times, truths)
     results = calculate_validation_statistics(probs, times, truths)
     roc_auc = auc(fpr, tpr)
     print(f'AUC IS {roc_auc}')
 
-    df_cm = pd.DataFrame(matrix_vals, index=["outside", "inside"], columns=["outside", "inside"])
+    df_cm_norm = pd.DataFrame(normed_matrix, index=["outside", "inside"], columns=["outside", "inside"])
+    df_cm = pd.DataFrame(matrix, index=["outside", "inside"], columns=["outside", "inside"])
     
+    plt.figure(figsize=(10, 7))
+    sns.heatmap(df_cm_norm, annot=True)
+    plt.xlabel("Actual")
+    plt.ylabel("Predicted")
+    plt.title("Population Normalized Confusion Matrix: Model V1")
+    plt.savefig(f"confusion_matrix_norm_{tag}.png")
+
+    plt.clf()
     plt.figure(figsize=(10, 7))
     sns.heatmap(df_cm, annot=True)
     plt.xlabel("Actual")
     plt.ylabel("Predicted")
-    plt.title("Population Normalized Confusion Matrix: Model V1")
+    plt.title("Confusion Matrix: Model V1")
     plt.savefig(f"confusion_matrix_{tag}.png")
 
     plt.clf()
