@@ -112,22 +112,6 @@ def generate_parser():
     return args
 
 
-def calculate_mean_std(loader, total=100):
-    mean = 0.0
-    std = 0.0
-    for i, (images, _) in enumerate(tqdm(loader)):
-        if i == total:
-            break
-        batch_samples = images.size(0)  # batch size (the last batch can have smaller size!)
-        images = images.view(batch_samples, images.size(1), -1)
-        mean += images.mean(2).sum(0)
-        std += images.std(2).sum(0)
-
-    mean /= len(loader.dataset)
-    std /= len(loader.dataset)
-    return mean, std
-
-
 class TorchModelCallback(pl.Callback):
     def __init__(self, path) -> None:
         super().__init__()
@@ -142,6 +126,14 @@ class TorchModelCallback(pl.Callback):
 
 
 class CustomFrameModule(FrameLevelModule):
+    def __init__(self, *args, **kwargs) -> None:
+        super().__init__(*args, **kwargs)
+
+        self.train_agg_preds = []
+        self.train_agg_truths = []
+        self.val_agg_preds = []
+        self.val_agg_truths = []
+
     def _FrameLevelModule__log_metrics(self, phase, preds, labels):
         preds = F.softmax(preds, dim=-1)[:, 1]  
         # get probabilities of first class 
@@ -165,13 +157,39 @@ class CustomFrameModule(FrameLevelModule):
             res = metric(labels, preds)
             self.log(f"{phase}_{name}", res, on_step=True, on_epoch=True)
 
-        cm = wandb.plot.confusion_matrix(
-            y_true=labels,
-            preds=preds,
-            class_names=["outside", "inside"]
-        )
+        if phase == "train":
+            self.train_agg_preds.append(preds)
+            self.train_agg_truths.append(labels)
 
-        self.logger.experiment.log({f"{phase}_confusion_matrix": cm})
+        if phase == "val":
+            self.val_agg_preds.append(preds)
+            self.val_agg_truths.append(labels)
+
+    def on_train_epoch_end(self):
+        train_preds = np.array(self.train_agg_preds).flatten()
+        train_truths = np.array(self.train_agg_truths).flatten()
+        
+        self.logger.experiment.log({"train_confusion_matrix": wandb.plot.confusion_matrix(
+            y_true=train_truths,
+            preds=train_preds,
+            class_names=["outside", "inside"]
+        )})
+
+        self.train_agg_preds = []
+        self.train_agg_truths = []
+
+    def on_val_epoch_end(self):
+        val_preds = np.array(self.val_agg_preds).flatten()
+        val_truths = np.array(self.val_agg_truths).flatten()
+
+        self.logger.experiment.log({"val_confusion_matrix": wandb.plot.confusion_matrix(
+            y_true=val_preds,
+            preds=val_truths,
+            class_names=["outside", "inside"]
+        )})
+
+        self.val_agg_preds = []
+        self.val_agg_truths = []
 
 
 if __name__ == "__main__":
