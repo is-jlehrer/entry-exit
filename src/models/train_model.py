@@ -214,7 +214,7 @@ if __name__ == "__main__":
     train_handler = TrainModel(
         base_model=model,
         trainer_config={
-            "max_epochs": 500,
+            "max_epochs": 10,
             "logger": WandbLogger(project="Julian EntryExit", name=params["name"]),
             "callbacks": [
                 LearningRateMonitor(logging_interval="epoch"),
