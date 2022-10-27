@@ -178,7 +178,7 @@ class CustomFrameModule(FrameLevelModule):
         self.train_agg_preds = []
         self.train_agg_truths = []
 
-    def on_val_epoch_end(self):
+    def on_validation_epoch_end(self):
         val_preds = np.array(self.val_agg_preds).flatten()
         val_truths = np.array(self.val_agg_truths).flatten()
 
@@ -223,8 +223,6 @@ if __name__ == "__main__":
             ],
             "accelerator": "gpu",
             "devices": 1,
-            "limit_val_batches": 10,
-            "limit_train_batches": 10,
         },
         model_config={
             "optimizer": optimizer,
