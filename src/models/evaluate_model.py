@@ -169,3 +169,11 @@ if __name__ == "__main__":
     plt.ylabel('True Positive Rate')
     plt.title('ROC Curve: Model V1')
     plt.savefig(f"roc_curve_{tag}.png")
+
+    plt.clf()
+    plt.figure(figsize=(10, 7))
+    sns.lineplot(x=np.log(fpr), y=np.log(tpr))
+    plt.xlabel('False Positive Rate')
+    plt.ylabel('True Positive Rate')
+    plt.title('ROC Curve: Model V1 (log scale)')
+    plt.savefig(f"roc_curve_log_{tag}.png")
