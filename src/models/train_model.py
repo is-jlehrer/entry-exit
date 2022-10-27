@@ -166,6 +166,7 @@ class CustomFrameModule(FrameLevelModule):
             self.val_agg_truths.append(labels)
 
     def on_train_epoch_end(self):
+        print('Logging train confusion matrix')
         train_preds = np.array(self.train_agg_preds).flatten()
         train_truths = np.array(self.train_agg_truths).flatten()
         
@@ -179,6 +180,7 @@ class CustomFrameModule(FrameLevelModule):
         self.train_agg_truths = []
 
     def on_validation_epoch_end(self):
+        print('Logging val confusion matrix')
         val_preds = np.array(self.val_agg_preds).flatten()
         val_truths = np.array(self.val_agg_truths).flatten()
 
