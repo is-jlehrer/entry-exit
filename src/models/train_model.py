@@ -141,7 +141,11 @@ class CustomFrameModule(FrameLevelModule):
         labels = labels.detach().cpu()
 
         # log auc before we convert to binary predictions
-        self.log(f"{phase}_auc", roc_auc_score(labels.numpy(), preds.numpy()), on_step=True, on_epoch=True)
+        try:
+            self.log(f"{phase}_auc", roc_auc_score(labels.numpy(), preds.numpy()), on_step=True, on_epoch=True)
+        except Exception as e:
+            print(e)
+            print(f'Couldnt log ROC for {phase}, continuing...')
 
         preds = (preds > 0.5).float().numpy()
         labels = labels.numpy()
@@ -154,8 +158,11 @@ class CustomFrameModule(FrameLevelModule):
         }
 
         for name, metric in metrics.items():
-            res = metric(labels, preds)
-            self.log(f"{phase}_{name}", res, on_step=True, on_epoch=True)
+            try:
+                res = metric(labels, preds)
+                self.log(f"{phase}_{name}", res, on_step=True, on_epoch=True)
+            except Exception as e:
+                print('Couldnt log {name} on {phase}, continuing...')
 
         if phase == "train":
             self.train_agg_preds.append(preds)
