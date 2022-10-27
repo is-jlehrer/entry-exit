@@ -223,6 +223,8 @@ if __name__ == "__main__":
             ],
             "accelerator": "gpu",
             "devices": 1,
+            "limit_val_batches": 10,
+            "limit_train_batches": 10,
         },
         model_config={
             "optimizer": optimizer,
