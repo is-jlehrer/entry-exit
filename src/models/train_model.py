@@ -163,42 +163,43 @@ class CustomFrameModule(FrameLevelModule):
                 self.log(f"{phase}_{name}", res, on_step=True, on_epoch=True)
             except Exception as e:
                 print(f'Couldnt log {name} on {phase}, continuing...')
+                print(e.__class__)
 
-        if phase == "train":
-            self.train_agg_preds.append(preds)
-            self.train_agg_truths.append(labels)
+        # if phase == "train":
+        #     self.train_agg_preds.append(preds)
+        #     self.train_agg_truths.append(labels)
 
-        if phase == "val":
-            self.val_agg_preds.append(preds)
-            self.val_agg_truths.append(labels)
+        # if phase == "val":
+        #     self.val_agg_preds.append(preds)
+        #     self.val_agg_truths.append(labels)
 
-    def on_train_epoch_end(self):
-        print('Logging train confusion matrix')
-        train_preds = np.array(self.train_agg_preds).flatten()
-        train_truths = np.array(self.train_agg_truths).flatten()
+    # def on_train_epoch_end(self):
+    #     print('Logging train confusion matrix')
+    #     train_preds = np.array(self.train_agg_preds).flatten()
+    #     train_truths = np.array(self.train_agg_truths).flatten()
         
-        self.logger.experiment.log({"train_confusion_matrix": wandb.plot.confusion_matrix(
-            y_true=train_truths,
-            preds=train_preds,
-            class_names=["outside", "inside"]
-        )})
+    #     self.logger.experiment.log({"train_confusion_matrix": wandb.plot.confusion_matrix(
+    #         y_true=train_truths,
+    #         preds=train_preds,
+    #         class_names=["outside", "inside"]
+    #     )})
 
-        self.train_agg_preds = []
-        self.train_agg_truths = []
+    #     self.train_agg_preds = []
+    #     self.train_agg_truths = []
 
-    def on_validation_epoch_end(self):
-        print('Logging val confusion matrix')
-        val_preds = np.array(self.val_agg_preds).flatten()
-        val_truths = np.array(self.val_agg_truths).flatten()
+    # def on_validation_epoch_end(self):
+    #     print('Logging val confusion matrix')
+    #     val_preds = np.array(self.val_agg_preds).flatten()
+    #     val_truths = np.array(self.val_agg_truths).flatten()
 
-        self.logger.experiment.log({"val_confusion_matrix": wandb.plot.confusion_matrix(
-            y_true=val_preds,
-            preds=val_truths,
-            class_names=["outside", "inside"]
-        )})
+    #     self.logger.experiment.log({"val_confusion_matrix": wandb.plot.confusion_matrix(
+    #         y_true=val_preds,
+    #         preds=val_truths,
+    #         class_names=["outside", "inside"]
+    #     )})
 
-        self.val_agg_preds = []
-        self.val_agg_truths = []
+    #     self.val_agg_preds = []
+    #     self.val_agg_truths = []
 
 
 if __name__ == "__main__":
