@@ -225,7 +225,7 @@ if __name__ == "__main__":
         base_model=model,
         trainer_config={
             "max_epochs": 10,
-            "logger": WandbLogger(project="Julian EntryExit", name=params["name"]),
+            "logger": WandbLogger(project="Entry Exit Ablative Study", name=params["name"]),
             "callbacks": [
                 LearningRateMonitor(logging_interval="epoch"),
                 StochasticWeightAveraging(swa_lrs=0.01),
