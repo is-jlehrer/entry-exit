@@ -275,6 +275,6 @@ if __name__ == "__main__":
     times.index = uris['origin_uri']
 
     tag = args["name"]
-    os.makedirs(os.path.join(here, "inference"), exist_ok=True)
-    probas.to_csv(os.path.join(here, f"inference/probs_{tag}.csv"))
-    times.to_csv(os.path.join(here, f"inference/times_{tag}.csv"))
+    os.makedirs(os.path.join(here, "ablation_inference"), exist_ok=True)
+    probas.to_csv(os.path.join(here, f"ablation_inference/probs_{tag}.csv"))
+    times.to_csv(os.path.join(here, f"ablation_inference/times_{tag}.csv"))
