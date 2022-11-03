@@ -28,7 +28,7 @@ THRESH = 0.5
 def generate_confusion_matrix(probs, times, truth):
     preds, truths = [], []
 
-    for vid in truth.index:
+    for vid in probs.index:
         pred = probs.loc[vid, :]
         pred = pred[~np.isnan(pred)]
         pred = pred.apply(lambda x: int(x > THRESH))
@@ -74,7 +74,7 @@ def generate_roc_curve(probs, times, truth):
 
 def calculate_validation_statistics(probs, times, truth):
     scores, truths = [], []
-    for vid in truth.index:
+    for vid in probs.index:
         score = probs.loc[vid, :]
         score = score[~np.isnan(score)].values
 
