@@ -52,7 +52,7 @@ def generate_confusion_matrix(probs, times, truth):
 def generate_roc_curve(probs, times, truth):
     scores, truths = [], []
 
-    for vid in truth.index:
+    for vid in probs.index:
         score = probs.loc[vid, :]
         score = score[~np.isnan(score)].values
 
