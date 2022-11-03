@@ -143,8 +143,8 @@ if __name__ == "__main__":
 
     probs, times, truths, save, tag = args["probs"], args["times"], args["metadata"], args["save"], args["tag"]
 
-    probs = pd.read_csv(probs, index_col='Unnamed: 0')
-    times = pd.read_csv(times, index_col='Unnamed: 0')
+    probs = pd.read_csv(probs, index_col='origin_uri')
+    times = pd.read_csv(times, index_col='origin_uri')
     truths = format_data_csv(truths, '', dropna=True)  # decomp path doesnt matter, just leave blank
     truths.index = truths["origin_uri"]
 
